@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài 5 | Sử dụng AI tạo sinh để hỗ trợ sáng tạo nội dung</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap");
+
+    :root {
+      --navy: #07071d;
+      --panel: #12112c;
+      --panel-2: #1c193a;
+      --pink: #ff9fc6;
+      --lavender: #bca9ff;
+      --cream: #fffaf8;
+      --muted: #c9c4dc;
+      --line: rgba(255,255,255,0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(234, 105, 168, 0.18), transparent 26%),
+        radial-gradient(circle at 15% 80%, rgba(91, 77, 211, 0.18), transparent 30%),
+        var(--navy);
+    }
+
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 7, 29, 0.86);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    header a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      width: min(1300px, 94%);
+      margin: 28px auto 70px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 28px;
+    }
+
+    aside {
+      background: rgba(18, 17, 44, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 15px;
+      height: fit-content;
+      position: sticky;
+      top: 105px;
+    }
+
+    .aside-title {
+      color: var(--pink);
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0 0 14px 8px;
+    }
+
+    .lesson-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .lesson-menu a {
+      display: block;
+      padding: 13px 12px;
+      margin-bottom: 7px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+      transition: 0.25s;
+    }
+
+    .lesson-menu a:hover,
+    .lesson-menu a.active {
+      background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+      color: #261025;
+      font-weight: 700;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .intro-box,
+    .content-box {
+      background: rgba(18, 17, 44, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .intro-box {
+      padding: 28px 30px;
+      margin-bottom: 22px;
+      background:
+        linear-gradient(120deg, rgba(93, 65, 158, 0.44), rgba(231, 105, 158, 0.22)),
+        rgba(18, 17, 44, 0.84);
+    }
+
+    .badge {
+      display: inline-block;
+      color: var(--pink);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      font-family: "Playfair Display", serif;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .intro-box p,
+    .content-box p,
+    li {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .content-box {
+      padding: 30px;
+      border-left: 3px solid var(--pink);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin: 28px 0 12px;
+      color: var(--cream);
+    }
+
+    h2:first-child {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 9px;
+    }
+
+    .highlight {
+      padding: 16px 18px;
+      margin-top: 22px;
+      border-radius: 14px;
+      background: rgba(255, 159, 198, 0.10);
+      border: 1px solid rgba(255, 159, 198, 0.25);
+      color: #f5ddea;
+    }
+
+    .next-button {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: #17102c;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+      }
+
+      .lesson-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .lesson-menu a {
+        margin: 0;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .lesson-menu {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-box,
+      .content-box {
+        padding: 22px;
+      }
+      .pdf-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+  color: #261025;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(242, 123, 176, 0.22);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pdf-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(242, 123, 176, 0.35);
+}
+    }
+  /* ===========================================================
+   BÀI 5 - AI TẠO SINH HỖ TRỢ SÁNG TẠO NỘI DUNG
+=========================================================== */
+
+.assignment-section{
+    margin-top:50px;
+    padding:40px;
+    border-radius:28px;
+    background:rgba(42,25,78,.45);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+    box-shadow:0 18px 40px rgba(0,0,0,.22);
+    animation:fadeUp .8s ease;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:50px;
+    background:linear-gradient(135deg,#ff78c9,#8b5cf6);
+    color:#fff;
+    font-size:.82rem;
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+.assignment-section h1{
+    margin:20px 0;
+    font-size:2.8rem;
+    color:#fff;
+    font-family:Georgia,"Times New Roman",serif;
+}
+
+.assignment-section h2{
+    margin-top:45px;
+    margin-bottom:18px;
+    color:#ffd5ef;
+    font-size:2rem;
+}
+
+.assignment-section h3{
+    margin:20px 0 12px;
+    color:#ffe5f5;
+}
+
+.assignment-section h4{
+    margin-top:10px;
+    color:#fff3fa;
+}
+
+.lead{
+    font-size:1.08rem;
+    line-height:1.9;
+    color:#ece4f7;
+}
+
+.assignment-section p{
+
+    color:#ece4f7;
+
+    line-height:1.9;
+
+}
+
+.assignment-section hr{
+
+    margin:45px 0;
+
+    border:none;
+
+    height:1px;
+
+    background:rgba(255,255,255,.12);
+
+}
+
+/* =======================
+PROMPT
+======================= */
+
+.prompt-box{
+
+    margin:25px 0;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    background:rgba(18,10,45,.6);
+
+    border-left:5px solid #ff9bc7;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+
+}
+
+.prompt-box h3{
+
+    margin-top:0;
+
+}
+
+.prompt-box blockquote{
+
+    margin:15px 0 0;
+
+    color:#f6f0ff;
+
+    line-height:1.8;
+
+    font-style:italic;
+
+    white-space:pre-line;
+
+}
+
+/* =======================
+KẾT QUẢ CHATGPT
+======================= */
+
+.result-box{
+
+    margin:25px 0;
+
+    padding:28px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.result-box h4{
+
+    color:#ffd6ec;
+
+    margin-bottom:18px;
+
+}
+
+.result-box ul{
+
+    margin:18px 0;
+
+    padding-left:24px;
+
+}
+
+.result-box li{
+
+    margin-bottom:10px;
+
+    color:#ece4f7;
+
+    line-height:1.8;
+
+}
+
+/* =======================
+ẢNH
+======================= */
+
+.image-grid{
+
+    text-align:center;
+
+    margin:35px 0;
+
+}
+
+.image-grid img{
+
+    width:100%;
+
+    max-width:850px;
+
+    border-radius:20px;
+
+    box-shadow:0 18px 40px rgba(0,0,0,.3);
+
+    transition:.35s;
+
+}
+
+.image-grid img:hover{
+
+    transform:scale(1.02);
+
+}
+
+.caption{
+
+    text-align:center;
+
+    color:#cfc4df;
+
+    font-style:italic;
+
+    margin-top:10px;
+
+    margin-bottom:25px;
+
+}
+
+/* =======================
+BẢNG ĐÁNH GIÁ
+======================= */
+
+.compare-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin:30px 0;
+
+    overflow:hidden;
+
+    border-radius:15px;
+
+}
+
+.compare-table th{
+
+    background:linear-gradient(135deg,#9f5bff,#ff7bc7);
+
+    color:white;
+
+    padding:16px;
+
+    text-align:center;
+
+}
+
+.compare-table td{
+
+    padding:16px;
+
+    color:#ece4f7;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.04);
+
+}
+
+.compare-table tr:hover td{
+
+    background:rgba(255,255,255,.08);
+
+}
+
+/* =======================
+DANH SÁCH
+======================= */
+
+.assignment-section ul{
+
+    padding-left:25px;
+
+}
+
+.assignment-section li{
+
+    margin-bottom:12px;
+
+    color:#ece4f7;
+
+    line-height:1.8;
+
+}
+
+.assignment-section li::marker{
+
+    color:#ff9bc7;
+
+}
+
+/* =======================
+ICON BOX
+======================= */
+
+.info-card{
+
+    margin:25px 0;
+
+    padding:24px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.05);
+
+    border-left:4px solid #8b5cf6;
+
+}
+
+/* =======================
+ANIMATION
+======================= */
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+
+transform:translateY(35px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+.assignment-section h2,
+.prompt-box,
+.result-box,
+.image-grid,
+.compare-table{
+
+animation:fadeUp .8s ease both;
+
+}
+
+/* =======================
+RESPONSIVE
+======================= */
+
+@media(max-width:900px){
+
+.assignment-section{
+
+padding:25px;
+
+}
+
+.assignment-section h1{
+
+font-size:2.2rem;
+
+}
+
+.assignment-section h2{
+
+font-size:1.6rem;
+
+}
+
+.compare-table{
+
+display:block;
+
+overflow-x:auto;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.assignment-section{
+
+padding:20px;
+
+}
+
+.badge{
+
+font-size:.72rem;
+
+}
+
+.assignment-section h1{
+
+font-size:1.8rem;
+
+}
+
+.assignment-section h2{
+
+font-size:1.4rem;
+
+}
+
+.prompt-box,
+.result-box{
+
+padding:20px;
+
+}
+
+.image-grid img{
+
+border-radius:15px;
+
+}
+
+}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">Thảo Nhi.</div>
+    <a href="index.html">← Quay về Portfolio</a>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <p class="aside-title">Danh sách bài thực hành</p>
+
+      <ul class="lesson-menu">
+        <li><a href="bai1.html">Bài 1: Quản lý tệp & thư mục</a></li>
+        <li><a href="bai2.html">Bài 2: Đánh giá học thuật</a></li>
+        <li><a href="bai3.html">Bài 3: Viết prompt hiệu quả</a></li>
+        <li><a href="bai4.html">Bài 4: Hợp tác trực tuyến</a></li>
+        <li><a class="active" href="bai5.html">Bài 5: Sáng tạo nội dung với AI</a></li>
+        <li><a href="bai6.html">Bài 6: AI có trách nhiệm</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section class="intro-box">
+  <span class="badge">Báo cáo thực hành · Chủ đề 5</span>
+  <h1>Sử dụng AI tạo sinh để hỗ trợ sáng tạo nội dung</h1>
+
+  <p>
+    Bài thực hành giúp mình tiếp cận tới đa dạng các AI tạo sinh với
+    mỗi một vai trò khác nhau, từ đó củng cố thêm các kiến thức mới 
+    về thực hành với trí tuệ nhân tạo.
+  </p>
+
+  <a
+    class="pdf-button"
+    href="./pdf/bai5-su-dung-ai-tao-sinh-de-ho-tro-sang-tao-noi-dung.pdf"
+    target="_blank"
+    rel="noopener"
+  >
+    ↓ Xem báo cáo PDF
+  </a>
+</section>
+
+<section class="assignment-section">
+
+    <span class="badge">BÁO CÁO THỰC HÀNH • CHỦ ĐỀ 5</span>
+
+    <h1>AI tạo sinh hỗ trợ sáng tạo nội dung</h1>
+
+    <p class="lead">
+        Trong chủ đề này, mình thực hành sử dụng ba công cụ AI tạo sinh gồm
+        <strong>ChatGPT</strong>, <strong>DALL·E</strong> và
+        <strong>Canva AI</strong> để hỗ trợ tạo nội dung học tập.
+        Mỗi công cụ được sử dụng cho một nhiệm vụ khác nhau nhằm đánh giá khả năng,
+        ưu điểm và hạn chế của AI trong quá trình sáng tạo.
+    </p>
+
+    <hr>
+
+    <!-- CHATGPT -->
+
+    <h2>1. Công cụ AI tạo văn bản (ChatGPT)</h2>
+
+    <p>
+        ChatGPT được sử dụng để tóm tắt tài liệu học thuật, giải thích khái niệm
+        và hỗ trợ xây dựng nội dung báo cáo.
+    </p>
+
+    <div class="prompt-box">
+
+        <h3>Prompt sử dụng</h3>
+
+        <blockquote>
+            Lập một dàn ý tóm tắt về chủ đề "Du lịch một mình (solo trips) tới Châu Âu" cho một infographic để giới thiệu và cung cấp những gì ần thiết cho những người quan tâm đến du lịch một mình. 
+        </blockquote>
+
+    </div>
+
+    <h3>Kết quả do ChatGPT tạo</h3>
+
+<div class="result-box">
+
+<h4>🌍 SOLO TRIPS TO EUROPE</h4>
+
+<p>
+Hướng dẫn dành cho người muốn du lịch một mình tại Châu Âu.
+</p>
+
+<ul>
+
+<li><strong>Lợi ích:</strong> Tự do lựa chọn lịch trình, khám phá bản thân, tăng sự tự tin và mở rộng các mối quan hệ.</li>
+
+<li><strong>Điểm đến gợi ý:</strong> Italy, Portugal, Netherlands và Spain.</li>
+
+<li><strong>Chuẩn bị:</strong> Hộ chiếu, visa, bảo hiểm du lịch, vé máy bay, chỗ ở và bản đồ ngoại tuyến.</li>
+
+<li><strong>Mẹo an toàn:</strong> Giữ bản sao giấy tờ, tránh khu vực vắng vào ban đêm, chia sẻ lịch trình với người thân.</li>
+
+<li><strong>Ngân sách:</strong> Khoảng <strong>400–1.300 EUR</strong> cho chuyến đi 7–10 ngày.</li>
+
+<li><strong>Ứng dụng hữu ích:</strong> Google Maps, Google Translate, Rome2Rio và Booking.com.</li>
+
+<li><strong>Thông điệp:</strong> <em>"Travel alone, but never feel lonely."</em></li>
+
+</ul>
+
+</div>
+    <p>
+        ChatGPT giúp tiết kiệm đáng kể thời gian đọc tài liệu, đồng thời hỗ trợ
+        diễn đạt nội dung rõ ràng, logic và phù hợp với sinh viên.
+    </p>
+
+    <hr>
+
+    <!-- DALLE -->
+
+    <h2>2. Công cụ AI tạo hình ảnh (DALL·E)</h2>
+
+    <p>
+        DALL·E được sử dụng để tạo hình minh họa phục vụ chủ đề du lịch châu Âu.
+    </p>
+
+    <div class="prompt-box">
+
+        <h3>Prompt sử dụng</h3>
+
+        <blockquote>
+            Summarized instructions for people who want to do solo trip to Europe, which is also suitable for an infographic.
+        </blockquote>
+
+    </div>
+
+    <div class="image-grid">
+
+        <img src="images/dalle-travel.jpg"
+             alt="DALL-E Illustration">
+
+    </div>
+
+    <p class="caption">
+        Hình 5.1. Hình minh họa được tạo bằng DALL·E.
+    </p>
+
+    <p>
+        DALL·E tạo ra hình ảnh có tính sáng tạo cao, màu sắc hài hòa và phù hợp
+        để minh họa nội dung học tập. Tuy nhiên, đôi khi cần điều chỉnh prompt
+        nhiều lần để đạt kết quả mong muốn.
+    </p>
+
+    <hr>
+
+    <!-- CANVA -->
+
+    <h2>3. Công cụ AI hỗ trợ thiết kế (Canva AI)</h2>
+
+    <p>
+        Canva AI được sử dụng để thiết kế infographic từ nội dung đã xây dựng.
+        Đây là công cụ giúp tạo bố cục đẹp mắt và trực quan chỉ trong thời gian ngắn.
+    </p>
+
+    <div class="prompt-box">
+
+        <h3>Prompt sử dụng</h3>
+
+        <blockquote>
+           Thiết kế một infographic với nội dung là tóm tắt những điều quan trọng trong việc hỗ trợ, giới thiệu cho người muốn thực hiện du lịch một mình tới Châu Âu.
+        </blockquote>
+
+    </div>
+
+    <div class="image-grid">
+
+        <img src="images/canva-infographic.png"
+             alt="Canva Infographic">
+
+    </div>
+
+    <p class="caption">
+        Hình 5.2. Infographic được thiết kế bằng Canva AI.
+    </p>
+
+    <p>
+        Canva AI hỗ trợ tự động đề xuất bố cục, biểu tượng và màu sắc,
+        giúp infographic trở nên trực quan và chuyên nghiệp hơn.
+        Tuy nhiên, người dùng vẫn cần chỉnh sửa nội dung để đảm bảo tính chính xác.
+    </p>
+
+    <hr>
+
+    <!-- DANH GIA -->
+
+    <h2>Đánh giá kết quả</h2>
+
+    <table class="compare-table">
+
+        <tr>
+            <th>Công cụ</th>
+            <th>Ưu điểm</th>
+            <th>Hạn chế</th>
+        </tr>
+
+        <tr>
+            <td>ChatGPT</td>
+            <td>Tóm tắt nhanh, hỗ trợ diễn đạt học thuật.</td>
+            <td>Cần kiểm chứng thông tin.</td>
+        </tr>
+
+        <tr>
+            <td>DALL·E</td>
+            <td>Tạo hình ảnh sáng tạo, màu sắc đẹp.</td>
+            <td>Cần tối ưu prompt nhiều lần.</td>
+        </tr>
+
+        <tr>
+            <td>Canva AI</td>
+            <td>Bố cục đẹp, chỉnh sửa dễ dàng.</td>
+            <td>Nội dung cần rà soát thủ công.</td>
+        </tr>
+
+    </table>
+
+    <hr>
+
+    <h2>AI làm tốt gì?</h2>
+
+    <ul>
+
+        <li>Tạo ý tưởng ban đầu (brainstorming).</li>
+
+        <li>Tăng tốc độ sáng tạo nội dung. </li>
+
+        <li>Xử lý và tổng hợp lượng lớn thông tin.</li>
+
+        <li>Hỗ trợ cá nhân hóa sản phẩm sáng tạo.</li>
+
+    </ul>
+
+    <hr>
+
+    <h2>AI còn hạn chế gì?</h2>
+
+    <ul>
+
+        <li>Có thể tạo thông tin chưa hoàn toàn chính xác.</li>
+
+        <li>Không thay thế được tư duy phản biện của con người.</li>
+
+        <li>Chất lượng phụ thuộc vào prompt.</li>
+
+        <li>Cần người dùng kiểm tra và chỉnh sửa đầu ra.</li>
+
+    </ul>
+
+    <hr>
+
+    <h2>Các vấn đề đạo đức</h2>
+
+    <ul>
+
+        <li>Bản quyền và sở hữu trí tuệ.</li>
+
+        <li>Minh bạch về việc sử dụng AI.</li>
+
+        <li>Tính nguyên bản và xác thực.</li>
+
+        <li>Thiên vị trong nội dung.</li>
+
+        <li>Trách nhiệm đối với sản phẩm AI tạo ra.</li>
+
+        <li>Tác động đến việc làm và ngành công nghiệp sáng tạo.</li>
+
+    </ul>
+
+    <hr>
+
+    <h2>Kết luận</h2>
+
+    <p>
+        Qua bài thực hành, mình nhận thấy AI tạo sinh là công cụ hỗ trợ hiệu quả
+        trong học tập. ChatGPT giúp xử lý và tóm tắt văn bản, DALL·E hỗ trợ tạo
+        hình minh họa sáng tạo, còn Canva AI giúp thiết kế infographic nhanh chóng
+        và chuyên nghiệp. Tuy nhiên, người học vẫn cần đánh giá, kiểm chứng và sử
+        dụng AI một cách có trách nhiệm để đảm bảo tính chính xác và đạo đức học thuật.
+    </p>
+
+     <a class="next-button" href="bai6.html">Xem Bài 6 →</a>
+
+</section>

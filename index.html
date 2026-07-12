@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Portfolio | Hoàng Nguyễn Thảo Nhi</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap");
+
+    :root {
+      --navy: #050721;
+      --navy-light: #0c1040;
+      --purple: #4c2b85;
+      --pink: #f0a6c7;
+      --lavender: #c9bbff;
+      --cream: #fffaf5;
+      --muted: #d1cde4;
+      --glass: rgba(255, 255, 255, 0.10);
+      --glass-strong: rgba(255, 255, 255, 0.15);
+      --border: rgba(255, 255, 255, 0.19);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "DM Sans", sans-serif;
+      color: var(--cream);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 72% 18%, rgba(190, 111, 190, 0.38), transparent 20%),
+        radial-gradient(circle at 22% 72%, rgba(84, 79, 200, 0.32), transparent 28%),
+        linear-gradient(135deg, #050721 0%, #0c1040 42%, #2c1456 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      z-index: -3;
+      pointer-events: none;
+    }
+
+    body::before {
+      width: 520px;
+      height: 520px;
+      background: rgba(235, 147, 181, 0.22);
+      filter: blur(100px);
+      top: 18%;
+      right: -170px;
+      animation: glowMove 10s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      width: 440px;
+      height: 440px;
+      background: rgba(106, 92, 255, 0.20);
+      filter: blur(100px);
+      bottom: -140px;
+      left: -130px;
+      animation: glowMoveReverse 12s ease-in-out infinite alternate;
+    }
+
+    .container {
+      width: min(1180px, 90%);
+      margin: auto;
+    }
+
+    /* Hình trang trí nền */
+    .floating-shape {
+      position: fixed;
+      z-index: -1;
+      pointer-events: none;
+      animation: floatShape 7s ease-in-out infinite;
+      opacity: 0.8;
+    }
+
+    .shape-cross {
+      top: 19%;
+      left: 8%;
+      font-size: 3.4rem;
+      color: #ffe0ee;
+    }
+
+    .shape-circle {
+      top: 25%;
+      right: 9%;
+      font-size: 5rem;
+      color: rgba(202, 183, 255, 0.7);
+      animation-delay: 1.5s;
+    }
+
+    .shape-square {
+      bottom: 17%;
+      left: 6%;
+      font-size: 3rem;
+      color: rgba(255, 255, 255, 0.62);
+      animation-delay: 2.5s;
+    }
+
+    .shape-star {
+      bottom: 12%;
+      right: 8%;
+      font-size: 4rem;
+      color: #ffc0db;
+      animation-delay: 0.8s;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(5, 7, 33, 0.72);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .nav-content {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: "Playfair Display", serif;
+      font-size: 1.65rem;
+      font-style: italic;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 26px;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.94rem;
+      transition: 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--pink);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      padding: 90px 0 60px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .eyebrow,
+    .section-label {
+      color: var(--pink);
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(4rem, 11vw, 9rem);
+      line-height: 0.84;
+      letter-spacing: -5px;
+      font-weight: 600;
+    }
+
+    .hero h1 span {
+      display: block;
+      margin-left: 70px;
+      font-style: italic;
+      color: #f9eaf4;
+      text-shadow:
+        0 0 12px rgba(255, 255, 255, 0.65),
+        0 0 35px rgba(218, 166, 255, 0.55),
+        0 0 65px rgba(235, 139, 180, 0.38);
+      animation: titleGlow 3.5s ease-in-out infinite alternate;
+    }
+
+    .hero-description {
+      max-width: 610px;
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      margin-top: 30px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 13px 22px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--cream);
+      color: var(--navy);
+    }
+
+    .btn-primary:hover {
+      background: var(--pink);
+      transform: translateY(-3px);
+    }
+
+    .btn-outline {
+      color: var(--cream);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background: var(--glass);
+      transform: translateY(-3px);
+    }
+
+    .hero-art {
+      min-height: 430px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .blur-card {
+      width: 340px;
+      height: 360px;
+      border-radius: 38px;
+      background:
+        linear-gradient(145deg, rgba(157, 129, 243, 0.84), rgba(237, 156, 185, 0.72)),
+        url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80");
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+      animation: cardFloat 5s ease-in-out infinite;
+    }
+
+    .hero-orbit {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.27);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .orbit-one {
+      width: 420px;
+      height: 420px;
+      animation: orbitPulse 7s ease-in-out infinite;
+    }
+
+    .orbit-two {
+      width: 300px;
+      height: 300px;
+      border-style: dashed;
+      animation: orbitRotate 16s linear infinite;
+    }
+
+    .circle-text {
+      position: absolute;
+      width: 225px;
+      height: 225px;
+      top: 10px;
+      right: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      font-style: italic;
+      background: rgba(12, 10, 54, 0.28);
+      backdrop-filter: blur(9px);
+      animation: circleFloat 6s ease-in-out infinite;
+    }
+
+    .sparkle {
+      position: absolute;
+      font-size: 3rem;
+    }
+
+    .sparkle.one {
+      top: 18px;
+      left: 0;
+      color: var(--cream);
+    }
+
+    .sparkle.two {
+      bottom: 0;
+      right: 15px;
+      color: var(--pink);
+    }
+
+    .hero-label {
+      position: absolute;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      line-height: 1.5;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .hero-label-top {
+      top: 20px;
+      left: 0;
+    }
+
+    .hero-label-bottom {
+      bottom: 15px;
+      right: 0;
+      text-align: right;
+      color: var(--pink);
+    }
+
+    /* Nội dung */
+    section {
+      padding: 105px 0;
+    }
+
+    .section-label {
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2.7rem, 5vw, 4.4rem);
+      line-height: 1.05;
+      margin-bottom: 22px;
+    }
+
+    .section-intro {
+      max-width: 760px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 48px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+    }
+
+    .about-card,
+    .project-card,
+    .reflection-card {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+      border-radius: 26px;
+    }
+
+    .about-card {
+      padding: 32px;
+    }
+
+    .about-card h3 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.65rem;
+      margin-bottom: 18px;
+    }
+
+    .about-card p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      padding: 8px 13px;
+      color: #f5eafa;
+      font-size: 0.84rem;
+    }
+
+    .goal-list {
+      list-style: none;
+      display: grid;
+      gap: 17px;
+    }
+
+    .goal-list li {
+      display: flex;
+      gap: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .goal-list span {
+      color: var(--pink);
+      font-weight: bold;
+    }
+
+    /* Dự án */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 390px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+      transition: 0.35s ease;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      top: -90px;
+      right: -80px;
+      border-radius: 50%;
+      background: rgba(222, 150, 202, 0.18);
+      filter: blur(25px);
+      transition: 0.4s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px) rotate(-0.5deg);
+      border-color: rgba(255, 211, 232, 0.68);
+      background: var(--glass-strong);
+      box-shadow: 0 25px 55px rgba(0, 0, 0, 0.35);
+    }
+
+    .project-card:hover::before {
+      transform: scale(1.6);
+      background: rgba(193, 153, 255, 0.28);
+    }
+
+    .project-number {
+      position: relative;
+      z-index: 1;
+      font-family: "Playfair Display", serif;
+      color: var(--lavender);
+      font-size: 3.7rem;
+      line-height: 1;
+      font-style: italic;
+    }
+
+    .project-card h3 {
+      position: relative;
+      z-index: 1;
+      margin: 15px 0 14px;
+      font-size: 1.28rem;
+    }
+
+    .project-card p {
+      position: relative;
+      z-index: 1;
+      color: var(--muted);
+      line-height: 1.68;
+      font-size: 0.93rem;
+      margin-bottom: 12px;
+    }
+
+    .project-card strong {
+      color: #fff6fb;
+    }
+
+    .project-link {
+      position: relative;
+      z-index: 1;
+      width: fit-content;
+      margin-top: 16px;
+      color: var(--pink);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .project-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 0;
+      height: 1px;
+      background: var(--pink);
+      transition: width 0.3s ease;
+    }
+
+    .project-link:hover::after {
+      width: 100%;
+    }
+
+    /* Tổng kết */
+    .reflection-card {
+      padding: 45px;
+      background:
+        linear-gradient(135deg, rgba(80, 49, 138, 0.52), rgba(213, 133, 169, 0.20)),
+        rgba(255, 255, 255, 0.08);
+    }
+
+    .reflection-card p {
+      color: #e4e0ef;
+      line-height: 1.9;
+      font-size: 1.02rem;
+      margin-bottom: 20px;
+    }
+
+    .reflection-card strong {
+      color: var(--pink);
+    }
+
+    footer {
+      padding: 35px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    /* Animation */
+    @keyframes glowMove {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(-80px, 70px) scale(1.18); }
+    }
+
+    @keyframes glowMoveReverse {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(90px, -60px) scale(1.15); }
+    }
+
+    @keyframes floatShape {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-22px) rotate(12deg); }
+    }
+
+    @keyframes titleGlow {
+      from { filter: brightness(1); transform: translateX(0); }
+      to { filter: brightness(1.24); transform: translateX(7px); }
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-13px) rotate(1deg); }
+    }
+
+    @keyframes circleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(12px); }
+    }
+
+    @keyframes orbitPulse {
+      0%, 100% { transform: scale(0.92); opacity: 0.45; }
+      50% { transform: scale(1.08); opacity: 0.9; }
+    }
+
+    @keyframes orbitRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 820px) {
+      .hero-grid,
+      .about-grid,
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 65px;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+
+      .hero h1 span {
+        margin-left: 25px;
+      }
+
+      .hero-art {
+        min-height: 340px;
+      }
+
+      .blur-card {
+        width: 270px;
+        height: 290px;
+      }
+
+      .orbit-one {
+        width: 330px;
+        height: 330px;
+      }
+
+      .orbit-two {
+        width: 240px;
+        height: 240px;
+      }
+
+      .circle-text {
+        width: 180px;
+        height: 180px;
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .nav-content {
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 0;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .nav-links a {
+        font-size: 0.78rem;
+      }
+
+      .about-card,
+      .project-card,
+      .reflection-card {
+        padding: 25px;
+      }
+
+      .project-card {
+        min-height: auto;
+      }
+
+      .floating-shape {
+        display: none;
+      }
+    }
+    /* =========================
+   HIỆU ỨNG TRANG TRÍ NỀN
+   ========================= */
+
+/* Để các hình không tạo thanh cuộn ngang */
+body {
+  overflow-x: hidden;
+}
+
+/* Đảm bảo Hero chứa các hiệu ứng nền */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Nội dung luôn nằm trên các hiệu ứng */
+.hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Các đốm màu tròn mờ */
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(12px);
+  opacity: 0.48;
+  pointer-events: none;
+  animation: glowFloat 7s ease-in-out infinite;
+}
+
+.glow-one {
+  width: 360px;
+  height: 360px;
+  top: -150px;
+  left: -120px;
+  background: radial-gradient(circle, rgba(174, 125, 255, 0.85), rgba(174, 125, 255, 0));
+}
+
+.glow-two {
+  width: 460px;
+  height: 460px;
+  right: -180px;
+  bottom: -240px;
+  background: radial-gradient(circle, rgba(255, 145, 199, 0.72), rgba(255, 145, 199, 0));
+  animation-delay: -3s;
+}
+
+/* Các ký hiệu nhỏ bay quanh trang */
+.floating-shape,
+.sea-creature {
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+  animation: floatAround 6s ease-in-out infinite;
+}
+
+.floating-shape {
+  color: rgba(255, 232, 248, 0.8);
+  font-size: 42px;
+  text-shadow: 0 0 20px rgba(255, 171, 220, 0.55);
+}
+
+.shape-cross {
+  top: 15%;
+  left: 7%;
+}
+
+.shape-circle {
+  top: 32%;
+  right: 6%;
+  font-size: 74px;
+  color: rgba(177, 149, 255, 0.5);
+  animation-delay: -2s;
+}
+
+.shape-square {
+  bottom: 20%;
+  left: 4%;
+  font-size: 58px;
+  animation-delay: -4s;
+}
+
+.shape-star {
+  top: 70%;
+  right: 8%;
+  font-size: 52px;
+  animation-delay: -1s;
+}
+
+/* Con mực: dùng ký hiệu trang trí, không cần tải ảnh */
+/* Sinh vật biển trang trí */
+.sea-creature {
+  position: fixed;
+  z-index: 20; /* nằm trên nền và luôn nhìn thấy */
+  pointer-events: none;
+  user-select: none;
+  display: block;
+  line-height: 1;
+  filter: drop-shadow(0 0 16px rgba(220, 190, 255, 0.8));
+  animation: seaFloat 7s ease-in-out infinite;
+}
+
+/* Con mực / bạch tuộc ở góc dưới bên trái */
+.jellyfish {
+  left: 4vw;
+  bottom: 8vh;
+  font-size: 72px;
+  animation-delay: -2s;
+}
+
+/* Sao biển ở góc phải */
+.starfish {
+  right: 4vw;
+  top: 62vh;
+  font-size: 64px;
+  animation-delay: -4s;
+}
+
+@keyframes seaFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translateY(-24px) rotate(8deg) scale(1.08);
+  }
+}
+
+/* Chuyển động nhẹ */
+@keyframes floatAround {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-18px) rotate(8deg);
+  }
+}
+
+@keyframes glowFloat {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(25px, 15px) scale(1.08);
+  }
+}
+
+/* Không để hiệu ứng che nội dung trên điện thoại */
+@media (max-width: 820px) {
+  .shape-circle,
+  .shape-square,
+  .jellyfish {
+    display: none;
+  }
+
+  .hero-glow.glow-one {
+    width: 260px;
+    height: 260px;
+  }
+
+  .hero-glow.glow-two {
+    width: 300px;
+    height: 300px;
+  }
+}
+/* Cá voi bơi ngang ở nền dưới */
+.whale {
+  position: fixed;
+  left: -120px;
+  bottom: 7vh;
+  z-index: 1;
+  font-size: 92px;
+  opacity: 0.62;
+  pointer-events: none;
+  filter: drop-shadow(0 0 18px rgba(171, 196, 255, 0.55));
+  animation: swimWhale 22s linear infinite;
+}
+
+/* Cá heo bơi ở khu vực phía trên bên phải */
+.dolphin {
+  position: fixed;
+  right: -90px;
+  top: 20vh;
+  z-index: 1;
+  font-size: 68px;
+  opacity: 0.75;
+  pointer-events: none;
+  filter: drop-shadow(0 0 14px rgba(194, 216, 255, 0.55));
+  animation: swimDolphin 15s ease-in-out infinite;
+}
+
+/* Cá nhỏ */
+.fish {
+  position: fixed;
+  z-index: 3;
+  font-size: 38px;
+  opacity: 0.65;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(255, 191, 226, 0.5));
+  animation: swimFish 12s linear infinite;
+}
+
+.fish-one {
+  left: -60px;
+  top: 72vh;
+}
+
+.fish-two {
+  left: -100px;
+  top: 38vh;
+  animation-delay: -6s;
+}
+
+/* Cá voi đi từ trái sang phải */
+@keyframes swimWhale {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateX(55vw) translateY(-22px) rotate(3deg);
+  }
+
+  100% {
+    transform: translateX(115vw) translateY(8px) rotate(0deg);
+  }
+}
+
+/* Cá heo nhảy nhẹ ở góc phải */
+@keyframes swimDolphin {
+  0%, 100% {
+    transform: translate(0, 0) rotate(-12deg);
+  }
+
+  50% {
+    transform: translate(-32vw, 55px) rotate(8deg);
+  }
+}
+
+/* Cá nhỏ bơi từ trái sang phải */
+@keyframes swimFish {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+
+  50% {
+    transform: translateX(55vw) translateY(-18px);
+  }
+
+  100% {
+    transform: translateX(115vw) translateY(5px);
+  }
+}
+
+/* Giảm bớt hiệu ứng trên điện thoại */
+@media (max-width: 820px) {
+  .whale {
+    font-size: 58px;
+    bottom: 4vh;
+  }
+
+  .dolphin {
+    font-size: 46px;
+  }
+
+  .fish {
+    display: none;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <!-- Hình trang trí nền -->
+<div class="floating-shape shape-cross">✦</div>
+<div class="floating-shape shape-circle">◌</div>
+<div class="floating-shape shape-square">◇</div>
+<div class="floating-shape shape-star">✧</div>
+
+<!-- Cá voi, cá heo và đàn cá trang trí -->
+<div class="sea-creature whale">🐋</div>
+<div class="sea-creature dolphin">🐬</div>
+
+<!-- Sinh vật biển trang trí -->
+<div class="sea-creature jellyfish">🪼</div>
+<div class="sea-creature starfish">⭐</div>
+<div class="sea-creature fish fish-two">🐠</div>
+
+  <div class="floating-shape shape-cross">✦</div>
+  <div class="floating-shape shape-circle">◌</div>
+  <div class="floating-shape shape-square">◇</div>
+  <div class="floating-shape shape-star">✧</div>
+
+  <nav>
+    <div class="container nav-content">
+      <div class="logo">Thảo Nhi.</div>
+
+      <ul class="nav-links">
+        <li><a href="#gioi-thieu">Giới thiệu</a></li>
+        <li><a href="#du-an">Dự án</a></li>
+        <li><a href="#tong-ket">Tổng kết</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-glow glow-one"></div>
+    <div class="hero-glow glow-two"></div>
+
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Digital Portfolio · 2026</p>
+
+        <h1>
+          <span>My Portfolio</span>
+        </h1>
+
+        <p class="hero-description">
+          Xin chào, mình là <strong>Hoàng Nguyễn Thảo Nhi</strong>, sinh viên ngành
+          <strong>Ngôn ngữ Anh</strong> tại <strong>Trường Đại học Ngoại ngữ –
+          Đại học Quốc gia Hà Nội (ULIS – VNU)</strong>. Đây là không gian lưu giữ
+          quá trình học tập, thực hành kỹ năng số, sử dụng công nghệ số có trách
+          nhiệm và phát triển hiệu quả làm việc với trí tuệ nhân tạo của mình.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#du-an" class="btn btn-primary">Khám phá dự án</a>
+          <a href="#gioi-thieu" class="btn btn-outline">Về mình</a>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="sparkle one">✦</div>
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+        <div class="blur-card"></div>
+
+        <div class="hero-label hero-label-top">
+          DIGITAL<br />PORTFOLIO
+        </div>
+
+        <div class="circle-text">
+          Learn.<br />Create.<br />Reflect.
+        </div>
+
+        <div class="hero-label hero-label-bottom">
+          ULIS – VNU<br />2026
+        </div>
+
+        <div class="sparkle two">✧</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="gioi-thieu">
+    <div class="container">
+      <p class="section-label">01 · About Me</p>
+      <h2 class="section-title">Giới thiệu</h2>
+
+      <p class="section-intro">
+        Portfolio này ghi lại sáu hoạt động học tập về kỹ năng số: từ quản lý dữ liệu,
+        tìm kiếm thông tin học thuật, viết prompt, hợp tác trực tuyến, sáng tạo nội dung
+        bằng AI đến liêm chính học thuật.
+      </p>
+
+      <div class="about-grid">
+        <article class="about-card reveal">
+          <h3>Về bản thân</h3>
+
+          <p>
+            Mình là <strong>Hoàng Nguyễn Thảo Nhi</strong>, sinh viên ngành
+            <strong>Ngôn ngữ Anh</strong> tại <strong>Trường Đại học Ngoại ngữ –
+            Đại học Quốc gia Hà Nội (ULIS – VNU)</strong>.
+          </p>
+
+          <p>
+            Mình quan tâm đến tâm lý học, khoa học thần kinh, nghiên cứu học thuật
+            và cách công nghệ, đặc biệt là AI, có thể hỗ trợ việc học nhưng không
+            thay thế tư duy độc lập của người học.
+          </p>
+
+          <div class="tag-list">
+            <span class="tag">English Language</span>
+            <span class="tag">ULIS – VNU</span>
+            <span class="tag">AI in Education</span>
+            <span class="tag">Research</span>
+            <span class="tag">Digital Skills</span>
+          </div>
+        </article>
+
+        <article class="about-card reveal">
+          <h3>Mục tiêu Portfolio</h3>
+
+          <ul class="goal-list">
+            <li><span>✦</span><div>Trình bày rõ ràng các kỹ năng số đã thực hành qua từng bài tập.</div></li>
+            <li><span>✦</span><div>Lưu giữ sản phẩm học tập để có thể xem lại, cập nhật và chia sẻ.</div></li>
+            <li><span>✦</span><div>Phản ánh quá trình tìm hiểu, thử nghiệm, đánh giá và chỉnh sửa nội dung.</div></li>
+            <li><span>✦</span><div>Xây dựng thói quen sử dụng công nghệ và AI một cách có trách nhiệm.</div></li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="du-an">
+    <div class="container">
+      <p class="section-label">02 · Selected Works</p>
+      <h2 class="section-title">Dự án học tập</h2>
+
+      <p class="section-intro">
+        Mỗi dự án dưới đây tóm tắt mục tiêu, cách mình thực hiện và sản phẩm cuối cùng
+        của sáu bài học.
+      </p>
+
+      <div class="project-grid">
+
+        <article class="project-card reveal">
+          <div>
+            <div class="project-number">01</div>
+            <h3>Máy tính và thiết bị ngoại vi</h3>
+            <p><strong>Mục tiêu:</strong> Rèn luyện thao tác với máy tính, tệp tin và thư mục để quản lý học liệu số khoa học.</p>
+            <p><strong>Thực hiện:</strong> Mình thực hành tạo, đổi tên, sắp xếp và phân loại tài liệu theo từng môn học; đồng thời nhận diện vai trò của các thiết bị ngoại vi trong quá trình học tập.</p>
+            <p><strong>Sản phẩm:</strong> Hệ thống thư mục học tập được tổ chức rõ ràng, giúp lưu trữ và truy xuất tài liệu thuận tiện hơn.</p>
+          </div>
+          <a href="bai1.html" class="project-link">Mở bài tập</a>
+        </article>
+
+        <article class="project-card reveal">
+          <div>
+            <div class="project-number">02</div>
+            <h3>Tìm kiếm & đánh giá thông tin học thuật</h3>
+            <p><strong>Mục tiêu:</strong> Tìm nguồn đáng tin cậy và đánh giá chất lượng thông tin học thuật.</p>
+            <p><strong>Thực hiện:</strong> Mình đánh giá các nghiên cứu về AI và giáo dục theo năm tiêu chí: tác giả, cơ quan xuất bản, phương pháp nghiên cứu, hệ thống trích dẫn và tính cập nhật.</p>
+            <p><strong>Sản phẩm:</strong> Bảng đánh giá các nguồn như nghiên cứu của Gerlich (2025), Kosmyna và cộng sự (2025), cùng các bài viết về công nghệ trong dạy và học tiếng Anh.</p>
+          </div>
+          <a href="bai2.html" class="project-link">Mở bài tập</a>
+        </article>
+
+        <article class="project-card reveal">
+          <div>
+            <div class="project-number">03</div>
+            <h3>Viết prompt hiệu quả cho học tập</h3>
+            <p><strong>Mục tiêu:</strong> Viết prompt rõ ràng để AI hỗ trợ giải thích, tóm tắt và tạo câu hỏi ôn tập.</p>
+            <p><strong>Thực hiện:</strong> Mình xây dựng prompt có vai trò, đối tượng người học, mục tiêu, cấu trúc đầu ra và yêu cầu ngôn ngữ. Chủ đề được chọn là các rối loạn thần kinh mạn tính.</p>
+            <p><strong>Sản phẩm:</strong> Bản giải thích về Alzheimer, Parkinson, động kinh; bản tóm tắt bài báo và bộ câu hỏi ôn tập về trí nhớ, cảm xúc, hippocampus và vỏ não trước trán.</p>
+          </div>
+          <a href="bai3.html" class="project-link">Mở bài tập</a>
+        </article>
+
+        <article class="project-card reveal">
+          <div>
+            <div class="project-number">04</div>
+            <h3>Hợp tác trong môi trường số</h3>
+            <p><strong>Mục tiêu:</strong> Sử dụng công cụ trực tuyến để phối hợp hiệu quả trong dự án nhóm.</p>
+            <p><strong>Thực hiện:</strong> Trong bài cuối kỳ môn <em>Ngôn ngữ và Truyền thông</em>, mình dùng Google Docs để soạn mục về hôn nhân đồng giới và giá trị hôn nhân truyền thống; Google Drive để lưu trữ, chia sẻ tệp; Google Meet để thảo luận, phân công và cập nhật tiến độ.</p>
+            <p><strong>Sản phẩm:</strong> Hồ sơ làm việc nhóm trực tuyến phục vụ dự án phỏng vấn về việc hợp pháp hóa hôn nhân đồng giới ở Việt Nam.</p>
+          </div>
+          <a href="bai4.html" class="project-link">Mở bài tập</a>
+        </article>
+
+        <article class="project-card reveal">
+          <div>
+            <div class="project-number">05</div>
+            <h3>Sáng tạo nội dung số với AI tạo sinh</h3>
+            <p><strong>Mục tiêu:</strong> Khám phá vai trò của AI tạo sinh trong việc hỗ trợ phát triển ý tưởng và thiết kế nội dung.</p>
+            <p><strong>Thực hiện:</strong> Mình thử nghiệm các công cụ AI để brainstorm, tổng hợp thông tin và thiết kế infographic. Sau đó, mình đánh giá điểm mạnh như tốc độ, khả năng gợi ý; và hạn chế như nội dung còn sơ sài, thiếu trải nghiệm thực tế hoặc có nguy cơ sai lệch.</p>
+            <p><strong>Sản phẩm:</strong> Infographic về những lưu ý dành cho người du lịch, được phát triển với sự hỗ trợ của AI và Canva AI.</p>
+          </div>
+          <a href="bai5.html" class="project-link">Mở bài tập</a>
+        </article>
+
+        <article class="project-card reveal">
+          <div>
+            <div class="project-number">06</div>
+            <h3>AI có trách nhiệm & liêm chính học thuật</h3>
+            <p><strong>Mục tiêu:</strong> Xác định ranh giới giữa hỗ trợ học tập hợp lý và gian lận học thuật khi dùng AI.</p>
+            <p><strong>Thực hiện:</strong> Mình dùng AI để tổng hợp tài liệu cho bài luận “Would AI be a blessing or a curse?”, sau đó kiểm chứng đầu ra bằng nguồn học thuật và báo cáo gốc. Mình cũng phân tích bản quyền, trích dẫn, tính minh bạch và nguy cơ phụ thuộc AI.</p>
+            <p><strong>Sản phẩm:</strong> Bộ nguyên tắc cá nhân: AI chỉ hỗ trợ, không thay thế tư duy; luôn kiểm chứng; không sao chép nguyên văn; minh bạch khi sử dụng và chịu trách nhiệm với bài làm cuối cùng.</p>
+          </div>
+          <a href="bai6.html" class="project-link">Mở bài tập</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="tong-ket">
+    <div class="container">
+      <p class="section-label">03 · Reflection</p>
+      <h2 class="section-title">Tổng kết</h2>
+
+      <div class="reflection-card reveal">
+        <p>
+          Quá trình xây dựng Portfolio giúp mình nhìn lại một cách rõ ràng hơn những gì
+          đã học được trong môi trường số. Mình không chỉ thực hành các kỹ năng như tìm kiếm
+          thông tin, quản lý tệp, làm việc nhóm hay sáng tạo nội dung, mà còn hiểu rõ hơn về
+          trách nhiệm cá nhân khi sử dụng công nghệ và AI. Qua học phần này, mình đã hiểu rõ hơn
+          về cách tổ chức tài liệu, biết đặt tên file dễ hiểu và lưu trữ theo từng môn, từng bài.
+          Không chỉ vậy, mình còn được biết đến và tiếp cận nhiều hơn với các giao diện AI mới mẻ
+          và khác biệt, được học các prompt chuyên nghiệp để hỗ trợ trong quá trình học tập
+          và phát triển công nghệ số.
+        </p>
+
+        <p>
+          Điều mình rút ra rõ nhất là <strong>AI có thể tăng tốc quá trình học tập,
+          nhưng không thể thay thế việc đọc, kiểm chứng, phân tích và đưa ra quyết định
+          của người học.</strong> Chất lượng của sản phẩm cuối cùng phụ thuộc vào cách
+          mình đặt mục tiêu, đánh giá đầu ra và chỉnh sửa nội dung.
+        </p>
+
+        <p>
+          Thách thức lớn nhất khi xây dựng Portfolio là chọn lọc nội dung phù hợp và trình bày
+          chúng theo cách vừa trực quan vừa thể hiện được quá trình học tập. Tuy nhiên, chính
+          quá trình này đã giúp mình phát triển kỹ năng tổ chức, rèn luyện tư duy và thiết kế nội dung số.
+          Trong tương lai, mình muốn tiếp tục sử dụng các công cụ số để hỗ trợ nghiên cứu
+          và học tập, đồng thời duy trì sự minh bạch, tôn trọng quyền sở hữu trí tuệ và
+          trách nhiệm cá nhân đối với mọi sản phẩm mình tạo ra.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Hoàng Nguyễn Thảo Nhi · Digital Learning Portfolio · ULIS – VNU
+  </footer>
+
+  <script>
+    const revealItems = document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    revealItems.forEach((item, index) => {
+      item.style.opacity = "0";
+      item.style.transform = "translateY(35px)";
+      item.style.transition = `opacity 0.75s ease ${index * 0.06}s, transform 0.75s ease ${index * 0.06}s`;
+      observer.observe(item);
+    });
+  </script>
+</body>
+</html>

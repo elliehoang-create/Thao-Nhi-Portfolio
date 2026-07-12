@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài 1 | Thao tác với tệp tin và thư mục</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap");
+
+    :root {
+      --navy: #07071d;
+      --panel: #12112c;
+      --panel-2: #1c193a;
+      --pink: #ff9fc6;
+      --lavender: #bca9ff;
+      --cream: #fffaf8;
+      --muted: #c9c4dc;
+      --line: rgba(255,255,255,0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(234, 105, 168, 0.18), transparent 26%),
+        radial-gradient(circle at 15% 80%, rgba(91, 77, 211, 0.18), transparent 30%),
+        var(--navy);
+    }
+
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 7, 29, 0.86);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    header a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      width: min(1300px, 94%);
+      margin: 28px auto 70px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 28px;
+    }
+
+    aside {
+      background: rgba(18, 17, 44, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 15px;
+      height: fit-content;
+      position: sticky;
+      top: 105px;
+    }
+
+    .aside-title {
+      color: var(--pink);
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0 0 14px 8px;
+    }
+
+    .lesson-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .lesson-menu a {
+      display: block;
+      padding: 13px 12px;
+      margin-bottom: 7px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+      transition: 0.25s;
+    }
+
+    .lesson-menu a:hover,
+    .lesson-menu a.active {
+      background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+      color: #261025;
+      font-weight: 700;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .intro-box,
+    .content-box {
+      background: rgba(18, 17, 44, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .intro-box {
+      border-radius: 30px;
+      padding: 28px 30px;
+      margin-bottom: 22px;
+      background:
+        linear-gradient(120deg, rgba(93, 65, 158, 0.44), rgba(231, 105, 158, 0.22)),
+        rgba(18, 17, 44, 0.84);
+    }
+
+    .badge {
+      display: inline-block;
+      color: var(--pink);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      font-family: "Playfair Display", serif;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .intro-box p,
+    .content-box p,
+    li {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .content-box {
+      padding: 30px;
+      border-left: 3px solid var(--pink);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin: 28px 0 12px;
+      color: var(--cream);
+    }
+
+    h2:first-child {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 9px;
+    }
+
+    .highlight {
+      padding: 16px 18px;
+      margin-top: 22px;
+      border-radius: 14px;
+      background: rgba(255, 159, 198, 0.10);
+      border: 1px solid rgba(255, 159, 198, 0.25);
+      color: #f5ddea;
+    }
+
+    .next-button {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: #17102c;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+      }
+
+      .lesson-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .lesson-menu a {
+        margin: 0;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .lesson-menu {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-box,
+      .content-box {
+        padding: 22px;
+      }
+      .pdf-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+  color: #261025;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(242, 123, 176, 0.22);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pdf-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(242, 123, 176, 0.35);
+}
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">Thảo Nhi.</div>
+    <a href="index.html">← Quay về Portfolio</a>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <p class="aside-title">Danh sách bài thực hành</p>
+
+      <ul class="lesson-menu">
+        <li><a class="active" href="bai1.html">Bài 1: Quản lý tệp & thư mục</a></li>
+        <li><a href="bai2.html">Bài 2: Đánh giá học thuật</a></li>
+        <li><a href="bai3.html">Bài 3: Viết prompt hiệu quả</a></li>
+        <li><a href="bai4.html">Bài 4: Hợp tác trực tuyến</a></li>
+        <li><a href="bai5.html">Bài 5: Sáng tạo nội dung với AI</a></li>
+        <li><a href="bai6.html">Bài 6: AI có trách nhiệm</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section class="intro-box">
+  <span class="badge">Báo cáo thực hành · Chủ đề 1</span>
+  <h1>Thao tác cơ bản với tệp tin và thư mục</h1>
+
+  <p>
+    Bài thực hành giúp mình tổ chức tài liệu một cách khoa học.
+  </p>
+
+  <a
+    class="pdf-button"
+    href="./pdf/bai1-thao-tac-tep-tin-va-thu-muc.pdf"
+    target="_blank"
+    rel="noopener"
+  >
+    ↓ Xem báo cáo PDF
+  </a>
+</section>
+
+      <section class="content-box">
+        <h2>1. Mục tiêu</h2>
+        <p>
+          Thực hành các thao tác cơ bản với tệp tin và thư mục, đồng thời hình thành
+          thói quen tổ chức tài liệu học tập khoa học trên máy tính.
+        </p>
+
+        <h2>2. Nội dung thực hiện</h2>
+        <ul>
+          <li>Tạo thư mục chính cho học kỳ và các thư mục con theo từng môn học.</li>
+          <li>Đặt tên tệp theo quy tắc thống nhất: môn học – nội dung – ngày cập nhật.</li>
+          <li>Thực hành tạo mới, đổi tên, sao chép, di chuyển và xóa tệp/thư mục.</li>
+          <li>Phân loại tài liệu thành bài tập, tài liệu tham khảo, hình ảnh và sản phẩm cuối cùng.</li>
+          <li>Kiểm tra dung lượng, vị trí lưu trữ và sao lưu các tài liệu quan trọng.</li>
+        </ul>
+
+        <h2>3. Kết quả</h2>
+        <p>
+          Mình đã xây dựng được một hệ thống thư mục học tập dễ theo dõi. Cách tổ chức này
+          giúp giảm thời gian tìm tài liệu và hỗ trợ quản lý sản phẩm cho các môn học khác.
+        </p>
+
+        <div class="highlight">
+          <strong>Điều rút ra:</strong> Một cấu trúc tệp rõ ràng là nền tảng cho việc học
+          và làm việc số hiệu quả, đặc biệt khi cần lưu trữ nhiều tài liệu và làm dự án nhóm.
+        </div>
+
+        <a class="next-button" href="bai2.html">Xem Bài 2 →</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

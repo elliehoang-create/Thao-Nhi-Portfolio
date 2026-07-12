@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài 3| Viết prompt hiệu quả cho tác vụ học tập</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap");
+
+    :root {
+      --navy: #07071d;
+      --panel: #12112c;
+      --panel-2: #1c193a;
+      --pink: #ff9fc6;
+      --lavender: #bca9ff;
+      --cream: #fffaf8;
+      --muted: #c9c4dc;
+      --line: rgba(255,255,255,0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(234, 105, 168, 0.18), transparent 26%),
+        radial-gradient(circle at 15% 80%, rgba(91, 77, 211, 0.18), transparent 30%),
+        var(--navy);
+    }
+
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 7, 29, 0.86);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    header a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      width: min(1300px, 94%);
+      margin: 28px auto 70px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 28px;
+    }
+
+    aside {
+      background: rgba(18, 17, 44, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 15px;
+      height: fit-content;
+      position: sticky;
+      top: 105px;
+    }
+
+    .aside-title {
+      color: var(--pink);
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0 0 14px 8px;
+    }
+
+    .lesson-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .lesson-menu a {
+      display: block;
+      padding: 13px 12px;
+      margin-bottom: 7px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+      transition: 0.25s;
+    }
+
+    .lesson-menu a:hover,
+    .lesson-menu a.active {
+      background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+      color: #261025;
+      font-weight: 700;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .intro-box,
+    .content-box {
+      background: rgba(18, 17, 44, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .intro-box {
+    padding: 28px 30px;
+      margin-bottom: 22px;
+      background:
+        linear-gradient(120deg, rgba(93, 65, 158, 0.44), rgba(231, 105, 158, 0.22)),
+        rgba(18, 17, 44, 0.84);
+}
+
+    .badge {
+      display: inline-block;
+      color: var(--pink);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      font-family: "Playfair Display", serif;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .intro-box p,
+    .content-box p,
+    li {
+      color: var(--muted);
+      line-height: 1.1;
+    }
+
+    .content-box {
+      padding: 30px;
+      border-left: 3px solid var(--pink);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin: 28px 0 12px;
+      color: var(--cream);
+    }
+
+    h2:first-child {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 9px;
+    }
+
+    .highlight {
+      padding: 16px 18px;
+      margin-top: 22px;
+      border-radius: 14px;
+      background: rgba(255, 159, 198, 0.10);
+      border: 1px solid rgba(255, 159, 198, 0.25);
+      color: #f5ddea;
+    }
+
+    .next-button {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: #17102c;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+      }
+
+      .lesson-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .lesson-menu a {
+        margin: 0;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .lesson-menu {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-box,
+      .content-box {
+        padding: 22px;
+      }
+      .pdf-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+  color: #261025;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(242, 123, 176, 0.22);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pdf-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(242, 123, 176, 0.35);
+}
+    }
+    /* ===== BÀI 3: KẾT QUẢ THỰC HÀNH TỪ BÀI BÁO ===== */
+.result-section {
+  margin-top: 44px;
+  padding: 36px;
+  border: 1px solid rgba(228, 191, 255, 0.18);
+  border-radius: 26px;
+  background: rgba(42, 25, 78, 0.45);
+}
+
+.result-section h2 {
+  margin: 0 0 24px;
+  color: #fff8f3;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.article-reference,
+.result-card {
+  margin-top: 20px;
+  padding: 22px;
+  border: 1px solid rgba(255, 214, 239, 0.16);
+  border-radius: 18px;
+  background: rgba(18, 10, 45, 0.58);
+}
+
+.article-reference {
+  margin-top: 0;
+}
+
+.article-reference h3,
+.result-card h3 {
+  margin: 0 0 12px;
+  color: #ffd0e6;
+  font-size: 1.12rem;
+}
+
+.article-reference p,
+.result-card p {
+  margin: 0;
+  color: #e9e1f2;
+  line-height: 1.75;
+}
+
+.result-card p + p {
+  margin-top: 12px;
+}
+
+.qa-list {
+  display: grid;
+  gap: 14px;
+}
+
+.qa-item {
+  padding: 16px;
+  border-left: 3px solid #ff9bc7;
+  border-radius: 0 12px 12px 0;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.qa-item h4 {
+  margin: 0 0 8px;
+  color: #ffe1ee;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.qa-item p {
+  color: #ddd2ed;
+}
+
+@media (max-width: 820px) {
+  .result-section {
+    padding: 24px 16px;
+  }
+
+  .article-reference,
+  .result-card {
+    padding: 18px;
+  }
+}
+/* ===== BÀI 3: PROMPT ENGINEERING ===== */
+.prompt-section,
+.analysis-section {
+  margin-top: 44px;
+  padding: 36px;
+  border: 1px solid rgba(228, 191, 255, 0.18);
+  border-radius: 26px;
+  background: rgba(42, 25, 78, 0.45);
+}
+
+.section-label {
+  margin: 0 0 10px;
+  color: #ff9bc7;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.prompt-section h2,
+.analysis-section h2 {
+  margin: 0;
+  color: #fff8f3;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.prompt-intro {
+  max-width: 850px;
+  margin: 14px 0 28px;
+  color: #ddd2ed;
+  line-height: 1.75;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid rgba(255, 214, 239, 0.18);
+  border-radius: 16px;
+}
+
+.prompt-table {
+  width: 100%;
+  min-width: 1250px;
+  border-collapse: collapse;
+  background: rgba(18, 10, 45, 0.62);
+}
+
+.prompt-table th,
+.prompt-table td {
+  padding: 18px;
+  color: #eee6f5;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.7;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.prompt-table th {
+  color: #301431;
+  font-size: 0.9rem;
+  background: linear-gradient(90deg, #ffb7d8, #c8a8ff);
+}
+
+.prompt-table th:first-child,
+.prompt-table td:first-child {
+  width: 160px;
+}
+
+.prompt-table td:first-child {
+  color: #ffd0e6;
+}
+
+.prompt-table th:last-child,
+.prompt-table td:last-child {
+  border-right: 0;
+}
+
+.prompt-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.analysis-card,
+.reflection-box,
+.question-box {
+  border: 1px solid rgba(255, 214, 239, 0.16);
+  border-radius: 18px;
+  background: rgba(18, 10, 45, 0.58);
+}
+
+.analysis-card {
+  padding: 22px;
+}
+
+.analysis-card h3,
+.reflection-box h3,
+.question-box h3 {
+  margin: 0 0 12px;
+  color: #ffd0e6;
+  font-size: 1.12rem;
+}
+
+.analysis-card p,
+.reflection-box p,
+.question-box li {
+  color: #e9e1f2;
+  line-height: 1.75;
+}
+
+.analysis-card p {
+  margin: 0;
+}
+
+.reflection-box,
+.question-box {
+  margin-top: 22px;
+  padding: 24px;
+}
+
+.question-box ol {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.question-box li + li {
+  margin-top: 12px;
+}
+
+@media (max-width: 820px) {
+  .prompt-section,
+  .analysis-section {
+    padding: 24px 16px;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prompt-table th,
+  .prompt-table td {
+    padding: 14px;
+    font-size: 0.9rem;
+  }
+}
+/* Phần phân tích Prompt chi tiết */
+.analysis-intro {
+  margin: 22px 0 28px;
+  padding: 20px 22px;
+  border-left: 4px solid #ff9bc7;
+  border-radius: 0 16px 16px 0;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.analysis-intro p {
+  margin: 0;
+  color: #e9e1f2;
+  line-height: 1.8;
+}
+
+.prompt-level {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #ffb7d8;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.prompt-example {
+  margin: 14px 0 !important;
+  padding: 14px;
+  border-radius: 12px;
+  color: #ffe1ee !important;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.feature-list {
+  margin: 16px 0;
+  padding-left: 20px;
+  color: #e9e1f2;
+  line-height: 1.75;
+}
+
+.feature-list li + li {
+  margin-top: 6px;
+}
+
+.technique-box {
+  margin-top: 14px;
+  padding: 15px;
+  border: 1px solid rgba(255, 214, 239, 0.14);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.technique-box h4 {
+  margin: 0 0 7px;
+  color: #ffe1ee;
+  font-size: 0.98rem;
+}
+
+.technique-box p {
+  margin: 0;
+}
+
+.principles-box {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 28px;
+  margin-top: 24px;
+  padding: 28px;
+  border: 1px solid rgba(255, 214, 239, 0.16);
+  border-radius: 18px;
+  background: rgba(18, 10, 45, 0.58);
+}
+
+.principles-box h3 {
+  margin: 0 0 12px;
+  color: #ffd0e6;
+  font-size: 1.25rem;
+}
+
+.principles-box p {
+  margin: 0;
+  color: #e9e1f2;
+  line-height: 1.75;
+}
+
+.principles-list {
+  margin: 0;
+  padding-left: 24px;
+  color: #e9e1f2;
+  line-height: 1.75;
+}
+
+.principles-list li + li {
+  margin-top: 8px;
+}
+
+@media (max-width: 820px) {
+  .principles-box {
+    grid-template-columns: 1fr;
+    padding: 22px 18px;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">Thảo Nhi.</div>
+    <a href="index.html">← Quay về Portfolio</a>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <p class="aside-title">Danh sách bài thực hành</p>
+
+      <ul class="lesson-menu">
+        <li><a href="bai1.html">Bài 1: Quản lý tệp & thư mục</a></li>
+        <li><a href="bai2.html">Bài 2: Đánh giá học thuật</a></li>
+        <li><a class="active" href="bai3.html">Bài 3: Viết prompt hiệu quả</a></li>
+        <li><a href="bai4.html">Bài 4: Hợp tác trực tuyến</a></li>
+        <li><a href="bai5.html">Bài 5: Sáng tạo nội dung với AI</a></li>
+        <li><a href="bai6.html">Bài 6: AI có trách nhiệm</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section class="intro-box">
+  <span class="badge">Báo cáo thực hành · Chủ đề 3</span>
+  <h1>Thực hành đặt yêu cầu rõ ràng để AI hỗ trợ học tập có định hướng</h1>
+
+  <p>
+    Bài thực hành giúp mình biết cách viết prompt hiệu quả, có vai trò hơn,
+    và đúng mục tiêu, đối tượng, cấu trúc đầu ra và yêu cầu ngôn ngữ.
+  </p>
+
+  <a
+    class="pdf-button"
+    href="./pdf/bai3-viet-prompt-hieu-qua-cho-tac-vu-hoc-tap.pdf"
+    target="_blank"
+    rel="noopener"
+  >
+    ↓ Xem báo cáo PDF
+  </a>
+</section>
+
+<section class="result-section">
+  <p class="section-label">KẾT QUẢ THỰC HÀNH</p>
+  <h2>Ứng dụng Prompt với bài báo học thuật</h2>
+
+  <div class="article-reference">
+    <h3>Tài liệu được sử dụng</h3>
+    <p>
+      <em>Neuropsychology of Chronic Neurological Disorders: A Review of Cognitive and Emotional Impairments.</em>
+      Cureus, 17(10), e93642.
+    </p>
+  </div>
+
+  <article class="result-card">
+    <h3>1. Giải thích khái niệm</h3>
+    <p>
+      <strong>Chronic Neurological Disorders (CNDs)</strong>, hay các rối loạn thần kinh
+      mạn tính, là nhóm bệnh kéo dài ảnh hưởng đến hệ thần kinh. Nhóm này có thể bao gồm
+      Alzheimer, Parkinson, động kinh, đa xơ cứng, đột quỵ và chấn thương sọ não.
+    </p>
+    <p>
+      Các bệnh này không chỉ gây khó khăn về vận động mà còn có thể làm suy giảm trí nhớ,
+      sự tập trung, khả năng ra quyết định, cảm xúc và hành vi xã hội. Vì vậy, người bệnh
+      thường cần được hỗ trợ cả về thể chất lẫn tâm lý.
+    </p>
+  </article>
+
+  <article class="result-card">
+    <h3>2. Tóm tắt bài báo</h3>
+    <p>
+      Bài báo phân tích tác động của các bệnh thần kinh mạn tính đối với chức năng nhận thức
+      và cảm xúc. Các bệnh như Alzheimer, Parkinson, động kinh và đa xơ cứng có thể ảnh hưởng
+      không chỉ đến vận động mà còn đến trí nhớ, sự chú ý, cảm xúc và hành vi xã hội.
+    </p>
+    <p>
+      Những thay đổi này có liên quan đến tổn thương hoặc rối loạn hoạt động ở các vùng não
+      quan trọng, chẳng hạn như hippocampus (đồi hải mã), liên quan đến trí nhớ, và vỏ não
+      trước trán, liên quan đến tư duy, lập kế hoạch và kiểm soát cảm xúc.
+    </p>
+    <p>
+      Bài báo nhấn mạnh vai trò của tâm lý học thần kinh trong chẩn đoán sớm, đánh giá mức độ
+      suy giảm và hỗ trợ điều trị. Phục hồi nhận thức, trị liệu tâm lý và các kỹ thuật chụp não
+      hiện đại có thể giúp nâng cao chất lượng cuộc sống cho người bệnh.
+    </p>
+  </article>
+
+  <article class="result-card">
+    <h3>3. Bộ câu hỏi ôn tập</h3>
+
+    <div class="qa-list">
+      <div class="qa-item">
+        <h4>1. Ngoài vận động, các bệnh thần kinh mạn tính còn ảnh hưởng đến những khía cạnh nào?</h4>
+        <p>
+          Chúng có thể ảnh hưởng đến trí nhớ, khả năng tập trung, cảm xúc, hành vi xã hội
+          và khả năng ra quyết định.
+        </p>
+      </div>
+
+      <div class="qa-item">
+        <h4>2. Vì sao tổn thương đồi hải mã và vỏ não trước trán có thể làm suy giảm trí nhớ và cảm xúc?</h4>
+        <p>
+          Đồi hải mã liên quan đến việc hình thành và lưu giữ trí nhớ, còn vỏ não trước trán
+          hỗ trợ tư duy, lập kế hoạch và kiểm soát cảm xúc. Khi các vùng này bị tổn thương,
+          người bệnh có thể hay quên, mất tập trung và khó điều chỉnh cảm xúc.
+        </p>
+      </div>
+
+      <div class="qa-item">
+        <h4>3. Nêu một biểu hiện nhận thức hoặc tâm lý của Alzheimer hoặc Parkinson.</h4>
+        <p>
+          Alzheimer thường gây suy giảm trí nhớ tiến triển. Parkinson có thể làm giảm sự chú ý
+          và đi kèm với các triệu chứng như trầm cảm.
+        </p>
+      </div>
+
+      <div class="qa-item">
+        <h4>4. Tâm lý học thần kinh hỗ trợ điều trị các bệnh thần kinh mạn tính như thế nào?</h4>
+        <p>
+          Lĩnh vực này hỗ trợ chẩn đoán sớm, đánh giá mức độ suy giảm nhận thức và xây dựng
+          các biện pháp như phục hồi nhận thức hoặc trị liệu tâm lý.
+        </p>
+      </div>
+
+      <div class="qa-item">
+        <h4>5. Vì sao chăm sóc sức khỏe tâm lý quan trọng bên cạnh điều trị thể chất?</h4>
+        <p>
+          Bệnh thần kinh có thể tác động đồng thời đến cơ thể, cảm xúc và đời sống xã hội.
+          Hỗ trợ tâm lý giúp người bệnh giảm lo âu, thích nghi tốt hơn và cải thiện chất lượng cuộc sống.
+        </p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="prompt-section">
+  <p class="section-label">MINH CHỨNG THỰC HÀNH</p>
+  <h2>So sánh các mức độ Prompt</h2>
+  <p class="prompt-intro">
+    Bài thực hành xây dựng prompt cho ba tác vụ học tập: giải thích khái niệm,
+    tóm tắt bài báo và lập câu hỏi ôn tập. Mỗi prompt được phát triển từ mức cơ bản
+    đến mức nâng cao bằng cách bổ sung vai trò, đối tượng, yêu cầu nội dung và cấu trúc đầu ra.
+  </p>
+
+  <div class="table-scroll">
+    <table class="prompt-table">
+      <thead>
+        <tr>
+          <th>Tác vụ</th>
+          <th>Prompt cơ bản</th>
+          <th>Prompt cải tiến</th>
+          <th>Prompt nâng cao</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Tác vụ 1</strong><br>Giải thích khái niệm phức tạp</td>
+          <td>Hãy giải thích giúp tôi khái niệm về các rối loạn thần kinh mạn tính.</td>
+          <td>Hãy giải thích khái niệm về các rối loạn thần kinh mạn tính theo cách dễ hiểu cho học sinh hoặc sinh viên mới học tâm lý học và khoa học thần kinh. Trình bày định nghĩa, nguyên nhân phổ biến, ảnh hưởng đến trí nhớ, cảm xúc và vận động; đưa ra ví dụ về Alzheimer, Parkinson và động kinh.</td>
+          <td>Bạn là một giảng viên đại học chuyên về tâm lý học thần kinh. Hãy giải thích “các rối loạn thần kinh mạn tính” cho sinh viên mới bắt đầu học. Trước tiên, định nghĩa đơn giản; sau đó phân tích nguyên nhân, vùng não liên quan, ảnh hưởng đến trí nhớ – cảm xúc – vận động và tác động đến cuộc sống hằng ngày. Trình bày theo trình tự logic và minh hoạ bằng Alzheimer, Parkinson, động kinh.</td>
+        </tr>
+
+        <tr>
+          <td><strong>Tác vụ 2</strong><br>Tóm tắt bài báo</td>
+          <td>Hãy giúp tôi tóm tắt bài báo học thuật này bằng tiếng Việt theo cách dễ hiểu.</td>
+          <td>Hãy đọc và tóm tắt bài báo học thuật này bằng tiếng Việt theo phong cách học thuật nhưng dễ hiểu cho học sinh hoặc sinh viên mới học. Nêu chủ đề chính, mục tiêu, luận điểm, ảnh hưởng của vấn đề nghiên cứu và kết luận. Trình bày khoảng 10–15 dòng.</td>
+          <td>Bạn là giảng viên neuroscience và neuropsychology, có nhiệm vụ giải thích bài báo học thuật cho sinh viên năm nhất. Hãy xác định chủ đề chính, mục tiêu, luận điểm, các vùng não/chức năng rối loạn được đề cập và ý nghĩa thực tiễn. Sau đó trình bày thành các đoạn ngắn, logic, dễ hiểu nhưng vẫn học thuật, khoảng 10–15 dòng và có kết luận.</td>
+        </tr>
+
+        <tr>
+          <td><strong>Tác vụ 3</strong><br>Lập câu hỏi ôn tập</td>
+          <td>Hãy lập một bộ câu hỏi ôn tập gồm 3 câu dựa trên nội dung của bài báo học thuật này.</td>
+          <td>Hãy tạo bộ 3 câu hỏi ôn tập dựa trên bài báo. Các câu hỏi tập trung vào nội dung chính, khái niệm quan trọng và khả năng áp dụng kiến thức; dùng ngôn ngữ rõ ràng, phù hợp với sinh viên mới học.</td>
+          <td>Bạn là giảng viên khoa học thần kinh và tâm lý học thần kinh. Dựa trên bài báo dưới đây, hãy thiết kế 3 câu hỏi theo mức độ tăng dần: một câu kiểm tra kiến thức cơ bản, một câu phân tích khái niệm và một câu vận dụng vào tình huống thực tế. Mỗi câu cần rõ ràng, phù hợp với sinh viên mới học.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="analysis-section">
+  <p class="section-label">PHÂN TÍCH &amp; PHẢN TƯ</p>
+  <h2>Vì sao Prompt nâng cao hiệu quả hơn?</h2>
+
+  <div class="analysis-grid">
+    <article class="analysis-card">
+      <h3>Prompt cơ bản</h3>
+      <p>
+        Prompt cơ bản chỉ đưa ra một yêu cầu chung. Vì thiếu đối tượng người đọc,
+        mức độ chi tiết và cấu trúc đầu ra, AI có thể trả lời ngắn, thiếu chiều sâu
+        hoặc bỏ sót các ý quan trọng.
+      </p>
+    </article>
+
+    <article class="analysis-card">
+      <h3>Prompt cải tiến</h3>
+      <p>
+        Prompt cải tiến bổ sung đối tượng người đọc, nội dung cần tập trung, độ dài
+        và phong cách trình bày. Nhờ vậy, đầu ra thường rõ ràng, đầy đủ và phù hợp hơn
+        với mục tiêu học tập.
+      </p>
+    </article>
+
+    <article class="analysis-card">
+      <h3>Prompt nâng cao</h3>
+      <p>
+        Prompt nâng cao sử dụng role prompting bằng cách gán vai trò chuyên môn cho AI
+        và yêu cầu trình bày theo trình tự logic. Điều này giúp câu trả lời có giọng văn
+        phù hợp, mạch lạc hơn và có chiều sâu hơn.
+      </p>
+    </article>
+  </div>
+
+  <div class="reflection-box">
+    <h3>Điều rút ra</h3>
+    <p>
+      Một prompt hiệu quả cần nêu rõ mục tiêu, đối tượng, bối cảnh, nội dung trọng tâm
+      và định dạng đầu ra. Khi yêu cầu càng cụ thể và có định hướng, AI càng dễ tạo ra
+      câu trả lời chính xác, phù hợp và hữu ích cho người học.
+    </p>
+  </div>
+
+  <div class="question-box">
+    <h3>Bộ câu hỏi ôn tập mẫu</h3>
+    <ol>
+      <li>Các rối loạn thần kinh mạn tính có thể ảnh hưởng đến những chức năng nào ngoài khả năng vận động?</li>
+      <li>Vì sao tổn thương hippocampus và vỏ não trước trán có thể dẫn đến suy giảm trí nhớ và thay đổi cảm xúc?</li>
+      <li>Nếu người bệnh Parkinson có triệu chứng trầm cảm và giảm tập trung, điều này có thể ảnh hưởng thế nào đến cuộc sống hằng ngày?</li>
+    </ol>
+  </div>
+</section>
+<section class="analysis-section">
+  <p class="section-label">PHÂN TÍCH & PHẢN TƯ</p>
+  <h2>Vì sao một số Prompt hiệu quả hơn?</h2>
+
+  <div class="analysis-intro">
+    <p>
+      Một số prompt hiệu quả hơn vì chúng cung cấp cho AI thông tin rõ ràng về
+      vai trò, mục tiêu, cấu trúc nội dung và cách trình bày kết quả. Khi prompt
+      càng cụ thể và có định hướng tốt, AI càng dễ tạo ra câu trả lời chính xác,
+      sâu sắc và phù hợp với nhu cầu của người dùng.
+    </p>
+  </div>
+
+  <div class="analysis-grid">
+    <article class="analysis-card">
+      <span class="prompt-level">MỨC 1</span>
+      <h3>Prompt cơ bản</h3>
+      <p class="prompt-example">
+        “Hãy tóm tắt bài báo học thuật này bằng tiếng Việt.”
+      </p>
+      <p>
+        Prompt cơ bản chỉ đưa ra một yêu cầu chung chung. AI chưa biết đối tượng
+        người đọc là ai, cần tập trung vào nội dung nào, độ dài ra sao hoặc phải
+        trình bày theo cấu trúc nào.
+      </p>
+      <p>
+        Vì vậy, câu trả lời thường ngắn, ít chiều sâu và có thể bỏ sót ý quan trọng.
+        Cách này phù hợp khi cần kết quả nhanh, nhưng chưa tối ưu cho mục tiêu học tập.
+      </p>
+    </article>
+
+    <article class="analysis-card">
+      <span class="prompt-level">MỨC 2</span>
+      <h3>Prompt cải tiến</h3>
+      <p class="prompt-example">
+        “Tóm tắt theo phong cách học thuật nhưng dễ hiểu, nêu mục tiêu nghiên cứu,
+        phát hiện chính và kết luận.”
+      </p>
+      <p>
+        Prompt cải tiến hiệu quả hơn vì bổ sung thông tin định hướng. AI hiểu rõ
+        điều gì cần ưu tiên và có thể điều chỉnh câu trả lời cho phù hợp.
+      </p>
+
+      <ul class="feature-list">
+        <li>Đối tượng người đọc: học sinh hoặc sinh viên</li>
+        <li>Nội dung cần tập trung</li>
+        <li>Độ dài mong muốn</li>
+        <li>Phong cách trình bày</li>
+      </ul>
+
+      <p>
+        Nhờ đó, đầu ra thường logic, đầy đủ và sát hơn với nhu cầu của người học.
+      </p>
+    </article>
+
+    <article class="analysis-card">
+      <span class="prompt-level">MỨC 3</span>
+      <h3>Prompt nâng cao</h3>
+      <p>
+        Prompt nâng cao kết hợp nhiều kỹ thuật prompt engineering để tạo ra đầu ra
+        có cấu trúc, chiều sâu và giọng văn phù hợp hơn.
+      </p>
+
+      <div class="technique-box">
+        <h4>Role Prompting</h4>
+        <p>
+          Gán vai trò cụ thể cho AI, ví dụ: “Bạn là một giảng viên neuroscience”.
+          Điều này giúp AI lựa chọn mức độ chuyên môn và giọng văn phù hợp.
+        </p>
+      </div>
+
+      <div class="technique-box">
+        <h4>Chain-of-Thought</h4>
+        <p>
+          Yêu cầu trình bày theo trình tự logic như:
+          <strong>vấn đề → nguyên nhân → ảnh hưởng → kết luận</strong>.
+          Nhờ đó, câu trả lời mạch lạc và có chiều sâu hơn.
+        </p>
+      </div>
+
+      <div class="technique-box">
+        <h4>Few-shot Examples</h4>
+        <p>
+          Cung cấp ví dụ mẫu để AI hiểu kiểu nội dung mong muốn và giảm khả năng
+          trả lời lệch hướng. Ví dụ: “Alzheimer → suy giảm trí nhớ do tổn thương
+          hippocampus”.
+        </p>
+      </div>
+    </article>
+  </div>
+
+  <div class="principles-box">
+    <div>
+      <p class="section-label">TỔNG HỢP KINH NGHIỆM</p>
+      <h3>Nguyên tắc viết Prompt hiệu quả</h3>
+      <p>
+        Dựa trên quá trình thử nghiệm từ prompt cơ bản đến prompt nâng cao, có thể
+        rút ra các nguyên tắc sau khi làm việc với AI:
+      </p>
+    </div>
+
+    <ol class="principles-list">
+      <li>Xác định rõ mục tiêu của tác vụ.</li>
+      <li>Chỉ định đối tượng người đọc.</li>
+      <li>Yêu cầu cấu trúc trình bày rõ ràng.</li>
+      <li>Sử dụng Role Prompting khi cần giọng văn hoặc chuyên môn phù hợp.</li>
+      <li>Yêu cầu trình tự lập luận logic cho tác vụ phức tạp.</li>
+      <li>Dùng Few-shot Examples khi cần định hướng đầu ra cụ thể.</li>
+      <li>Giới hạn phạm vi nội dung để tránh câu trả lời lan man.</li>
+      <li>Quy định phong cách ngôn ngữ và mức độ học thuật.</li>
+      <li>Kết hợp nhiều kỹ thuật prompt engineering khi phù hợp.</li>
+      <li>Thử nghiệm và điều chỉnh prompt dựa trên chất lượng kết quả.</li>
+    </ol>
+  </div>
+
+  <div class="reflection-box">
+    <h3>Điều rút ra</h3>
+    <p>
+      Một prompt tốt không chỉ là một câu hỏi, mà là một hướng dẫn rõ ràng giúp AI
+      hiểu đúng mục tiêu học tập. Việc bổ sung bối cảnh, đối tượng, cấu trúc đầu ra
+      và kỹ thuật prompt engineering giúp kết quả chính xác, dễ sử dụng và có giá trị
+      hơn trong quá trình học tập.
+    </p>
+  </div>
+  <a class="next-button" href="bai4.html">Xem Bài 4 →</a>
+</section>

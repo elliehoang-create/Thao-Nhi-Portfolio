@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài 4 | Sử dụng công cụ hợp tác trực tuyến cho dự án nhóm</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap");
+
+    :root {
+      --navy: #07071d;
+      --panel: #12112c;
+      --panel-2: #1c193a;
+      --pink: #ff9fc6;
+      --lavender: #bca9ff;
+      --cream: #fffaf8;
+      --muted: #c9c4dc;
+      --line: rgba(255,255,255,0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(234, 105, 168, 0.18), transparent 26%),
+        radial-gradient(circle at 15% 80%, rgba(91, 77, 211, 0.18), transparent 30%),
+        var(--navy);
+    }
+
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 7, 29, 0.86);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    header a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      width: min(1300px, 94%);
+      margin: 28px auto 70px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 28px;
+    }
+
+    aside {
+      background: rgba(18, 17, 44, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 15px;
+      height: fit-content;
+      position: sticky;
+      top: 105px;
+    }
+
+    .aside-title {
+      color: var(--pink);
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0 0 14px 8px;
+    }
+
+    .lesson-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .lesson-menu a {
+      display: block;
+      padding: 13px 12px;
+      margin-bottom: 7px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+      transition: 0.25s;
+    }
+
+    .lesson-menu a:hover,
+    .lesson-menu a.active {
+      background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+      color: #261025;
+      font-weight: 700;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .intro-box,
+    .content-box {
+      background: rgba(18, 17, 44, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .intro-box {
+      padding: 28px 30px;
+      margin-bottom: 22px;
+      background:
+        linear-gradient(120deg, rgba(93, 65, 158, 0.44), rgba(231, 105, 158, 0.22)),
+        rgba(18, 17, 44, 0.84);
+    }
+
+    .badge {
+      display: inline-block;
+      color: var(--pink);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      font-family: "Playfair Display", serif;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .intro-box p,
+    .content-box p,
+    li {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .content-box {
+      padding: 30px;
+      border-left: 3px solid var(--pink);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin: 28px 0 12px;
+      color: var(--cream);
+    }
+
+    h2:first-child {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 9px;
+    }
+
+    .highlight {
+      padding: 16px 18px;
+      margin-top: 22px;
+      border-radius: 14px;
+      background: rgba(255, 159, 198, 0.10);
+      border: 1px solid rgba(255, 159, 198, 0.25);
+      color: #f5ddea;
+    }
+
+    .next-button {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: #17102c;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+      }
+
+      .lesson-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .lesson-menu a {
+        margin: 0;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .lesson-menu {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-box,
+      .content-box {
+        padding: 22px;
+      }
+      .pdf-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+  color: #261025;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 25px rgba(242, 123, 176, 0.22);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pdf-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(242, 123, 176, 0.35);
+}
+    }
+/* =======================================================
+   BÀI 4 - SỬ DỤNG CÔNG CỤ HỢP TÁC TRỰC TUYẾN
+======================================================= */
+
+.project-section,
+.tool-section,
+.effect-section,
+.reflection-section{
+    margin-top:50px;
+    padding:36px;
+    border-radius:26px;
+    background:rgba(42,25,78,.45);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.section-label{
+    display:inline-block;
+    margin-bottom:12px;
+    font-size:.78rem;
+    font-weight:700;
+    letter-spacing:.15em;
+    color:#ff9bc7;
+    text-transform:uppercase;
+}
+
+.project-section h2,
+.tool-section h2,
+.effect-section h2,
+.reflection-section h2{
+    color:#fff6fa;
+    margin-bottom:18px;
+    font-size:2rem;
+    font-family:Georgia,"Times New Roman",serif;
+}
+
+.project-intro{
+    color:#ece4f7;
+    line-height:1.9;
+    font-size:1.05rem;
+}
+
+/*=======================
+GRID
+=======================*/
+
+.tool-grid,
+.effect-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:26px;
+    margin-top:35px;
+}
+
+/*=======================
+CARD
+=======================*/
+
+.tool-card,
+.effect-card{
+
+    background:rgba(22,14,52,.60);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:22px;
+
+    padding:28px;
+
+    transition:.35s;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/* ánh sáng góc */
+
+.tool-card::before,
+.effect-card::before{
+
+content:"";
+
+position:absolute;
+
+top:-60px;
+
+right:-60px;
+
+width:120px;
+
+height:120px;
+
+background:radial-gradient(circle,
+rgba(255,255,255,.18),
+transparent);
+
+}
+
+.tool-card:hover,
+.effect-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:
+0 18px 40px rgba(0,0,0,.25);
+
+border-color:#ff9bc7;
+
+}
+
+.tool-card h3,
+.effect-card h3{
+
+margin-bottom:18px;
+
+font-size:1.3rem;
+
+color:#ffd4ec;
+
+}
+
+.tool-card p,
+.effect-card p{
+
+color:#ece4f7;
+
+line-height:1.85;
+
+margin-bottom:15px;
+
+}
+
+.tool-card ul,
+.effect-card ul{
+
+padding-left:22px;
+
+line-height:1.9;
+
+color:#ece4f7;
+
+}
+
+.tool-card li,
+.effect-card li{
+
+margin-bottom:8px;
+
+}
+
+/*=======================
+NOTE BOX
+=======================*/
+
+.note-box{
+
+margin-top:20px;
+
+padding:18px;
+
+background:rgba(255,255,255,.05);
+
+border-left:4px solid #ff9bc7;
+
+border-radius:0 15px 15px 0;
+
+}
+
+.note-box strong{
+
+display:block;
+
+color:#ffd4ec;
+
+margin-bottom:8px;
+
+font-size:1rem;
+
+}
+
+.note-box p{
+
+margin-bottom:14px;
+
+}
+
+/*=======================
+REFLECTION
+=======================*/
+
+.reflection-section p{
+
+line-height:1.95;
+
+color:#ece4f7;
+
+margin-bottom:18px;
+
+}
+
+/*=======================
+ANIMATION
+=======================*/
+
+.project-section,
+.tool-card,
+.effect-card,
+.reflection-section{
+
+animation:fadeUp .8s ease both;
+
+}
+
+.tool-card:nth-child(2){
+
+animation-delay:.15s;
+
+}
+
+.tool-card:nth-child(3){
+
+animation-delay:.3s;
+
+}
+
+.effect-card:nth-child(2){
+
+animation-delay:.2s;
+
+}
+
+.effect-card:nth-child(3){
+
+animation-delay:.35s;
+
+}
+
+@keyframes fadeUp{
+
+from{
+
+opacity:0;
+
+transform:translateY(40px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/*=======================
+LIST ICON
+=======================*/
+
+.tool-card ul li::marker,
+.effect-card ul li::marker{
+
+color:#ff9bc7;
+
+}
+
+/*=======================
+RESPONSIVE
+=======================*/
+
+@media(max-width:900px){
+
+.project-section,
+.tool-section,
+.effect-section,
+.reflection-section{
+
+padding:24px;
+
+}
+
+.tool-grid,
+.effect-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.project-section h2,
+.tool-section h2,
+.effect-section h2,
+.reflection-section h2{
+
+font-size:1.7rem;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.project-section,
+.tool-section,
+.effect-section,
+.reflection-section{
+
+padding:20px;
+
+}
+
+.tool-card,
+.effect-card{
+
+padding:22px;
+
+}
+
+.project-intro{
+
+font-size:.98rem;
+
+}
+
+}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">Thảo Nhi.</div>
+    <a href="index.html">← Quay về Portfolio</a>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <p class="aside-title">Danh sách bài thực hành</p>
+
+      <ul class="lesson-menu">
+        <li><a href="bai1.html">Bài 1: Quản lý tệp & thư mục</a></li>
+        <li><a href="bai2.html">Bài 2: Đánh giá học thuật</a></li>
+        <li><a href="bai3.html">Bài 3: Viết prompt hiệu quả</a></li>
+        <li><a class="active" href="bai4.html">Bài 4: Hợp tác trực tuyến</a></li>
+        <li><a href="bai5.html">Bài 5: Sáng tạo nội dung với AI</a></li>
+        <li><a href="bai6.html">Bài 6: AI có trách nhiệm</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section class="intro-box">
+  <span class="badge">Báo cáo thực hành · Chủ đề 4</span>
+  <h1>Sử dụng công cụ hợp tác trực tuyến cho dự án nhóm</h1>
+
+  <p>
+    Bài thực hành giúp mình tiếp cận và phát triển các công cụ trực tuyến
+    hỗ trợ cho dự án nhóm và có thể cộng hưởng với nhau ở mọi lúc, mợi nơi.
+  </p>
+
+  <a
+    class="pdf-button"
+    href="./pdf/bai4-su-dung-cong-cu-hop-tac-truc-tuyen-cho-du-an-nhom.pdf"
+    target="_blank"
+    rel="noopener"
+  >
+    ↓ Xem báo cáo PDF
+  </a>
+</section>
+
+<!-- ===================== DỰ ÁN NHÓM ===================== -->
+<section class="project-section">
+
+    <p class="section-label">DỰ ÁN NHÓM</p>
+
+    <h2>Làm việc nhóm môn Ngôn ngữ và Truyền thông</h2>
+
+    <p class="project-intro">
+        Trong quá trình thực hiện bài tập cuối kỳ với chủ đề
+        <strong>"Phỏng vấn về việc hợp pháp hóa hôn nhân đồng giới tại Việt Nam"</strong>,
+        nhóm đã sử dụng nhiều công cụ cộng tác trực tuyến nhằm hỗ trợ soạn thảo,
+        lưu trữ dữ liệu và giao tiếp giữa các thành viên.
+    </p>
+
+</section>
+
+<!-- ===================== CÔNG CỤ ĐÃ SỬ DỤNG ===================== -->
+<section class="tool-section">
+
+    <p class="section-label">CÔNG CỤ HỢP TÁC</p>
+
+    <h2>Các công cụ đã sử dụng</h2>
+
+    <div class="tool-grid">
+
+        <!-- Google Docs -->
+        <article class="tool-card">
+
+            <h3>📄 Google Docs</h3>
+
+            <p>
+                Mình trực tiếp thực hiện phần nội dung liên quan đến tác động của
+                hôn nhân đồng giới đối với các giá trị của hôn nhân truyền thống.
+            </p>
+
+            <p>
+                Google Docs hỗ trợ cộng tác theo thời gian thực, giúp các thành viên
+                chỉnh sửa và phản hồi ý tưởng ngay lập tức.
+            </p>
+
+            <div class="note-box">
+
+                <strong>Khó khăn</strong>
+
+                <p>
+                    Khi nhiều thành viên cùng chỉnh sửa một tài liệu dài,
+                    bố cục và định dạng có thể bị thay đổi ngoài ý muốn.
+                </p>
+
+                <strong>Giải pháp</strong>
+
+                <p>
+                    Nhóm sử dụng Heading, Outline và phân chia rõ từng phần để
+                    tránh chỉnh sửa chồng chéo.
+                </p>
+
+            </div>
+
+        </article>
+
+        <!-- Google Drive -->
+        <article class="tool-card">
+
+            <h3>☁ Google Drive</h3>
+
+            <p>
+                Google Drive được sử dụng để lưu trữ toàn bộ tài liệu, hình ảnh,
+                video và các tệp của nhóm trong cùng một không gian trực tuyến.
+            </p>
+
+            <ul>
+
+                <li>Lưu trữ dữ liệu trên nền tảng đám mây.</li>
+
+                <li>Chia sẻ nhanh giữa các thành viên.</li>
+
+                <li>Tích hợp với Google Docs, Sheets và Slides.</li>
+
+                <li>Hạn chế mất dữ liệu khi máy tính gặp sự cố.</li>
+
+                <li>Dễ dàng quản lý quyền truy cập.</li>
+
+            </ul>
+
+        </article>
+
+        <!-- Google Meet -->
+        <article class="tool-card">
+
+            <h3>🎥 Google Meet</h3>
+
+            <p>
+                Google Meet được sử dụng trong các buổi họp trực tuyến của nhóm
+                để trao đổi ý tưởng và phân chia công việc.
+            </p>
+
+            <p>
+                Các thành viên có thể chia sẻ màn hình, trình bày tài liệu,
+                cập nhật tiến độ và thống nhất nội dung ngay trong buổi họp.
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+<!-- ===================== ĐÁNH GIÁ ===================== -->
+<section class="effect-section">
+
+    <p class="section-label">ĐÁNH GIÁ HIỆU QUẢ</p>
+
+    <h2>Hiệu quả của từng công cụ</h2>
+
+    <div class="effect-grid">
+
+        <article class="effect-card">
+
+            <h3>🎥 Google Meet</h3>
+
+            <p>
+                Google Meet giúp nhóm giao tiếp thuận tiện ngay cả khi các thành viên
+                ở nhiều địa điểm khác nhau.
+            </p>
+
+            <ul>
+
+                <li>Họp trực tuyến nhanh chóng.</li>
+
+                <li>Chia sẻ màn hình dễ dàng.</li>
+
+                <li>Trao đổi ý tưởng theo thời gian thực.</li>
+
+                <li>Tiết kiệm thời gian di chuyển.</li>
+
+                <li>Tăng hiệu quả phối hợp công việc.</li>
+
+            </ul>
+
+        </article>
+
+        <article class="effect-card">
+
+            <h3>📄 Google Docs</h3>
+
+            <p>
+                Google Docs là công cụ quan trọng nhất trong quá trình soạn thảo
+                báo cáo nhóm.
+            </p>
+
+            <ul>
+
+                <li>Nhiều người chỉnh sửa cùng lúc.</li>
+
+                <li>Tự động lưu nội dung.</li>
+
+                <li>Theo dõi lịch sử chỉnh sửa.</li>
+
+                <li>Phân quyền cho từng thành viên.</li>
+
+                <li>Giảm thời gian tổng hợp tài liệu.</li>
+
+            </ul>
+
+        </article>
+
+        <article class="effect-card">
+
+            <h3>☁ Google Drive</h3>
+
+            <p>
+                Google Drive giúp nhóm lưu trữ và quản lý toàn bộ tài liệu
+                của dự án một cách khoa học.
+            </p>
+
+            <ul>
+
+                <li>Lưu trữ an toàn trên Cloud.</li>
+
+                <li>Đồng bộ giữa nhiều thiết bị.</li>
+
+                <li>Chia sẻ tệp nhanh chóng.</li>
+
+                <li>Sao lưu dữ liệu tự động.</li>
+
+                <li>Dễ dàng tìm kiếm tài liệu.</li>
+
+            </ul>
+
+        </article>
+
+    </div>
+
+</section>
+
+<!-- ===================== NHẬN XÉT ===================== -->
+<section class="reflection-section">
+
+    <p class="section-label">TỔNG KẾT</p>
+
+    <h2>Bài học rút ra</h2>
+
+    <p>
+        Qua quá trình thực hiện dự án nhóm, mình nhận thấy việc kết hợp Google Docs,
+        Google Drive và Google Meet giúp tăng đáng kể hiệu quả cộng tác trực tuyến.
+        Các thành viên có thể cùng xây dựng nội dung, chia sẻ tài liệu và trao đổi
+        công việc mọi lúc, mọi nơi.
+    </p>
+
+    <p>
+        Ngoài việc nâng cao hiệu suất học tập, các công cụ này còn giúp rèn luyện
+        kỹ năng giao tiếp, quản lý thời gian, phân chia nhiệm vụ và làm việc nhóm
+        trong môi trường số. Đây đều là những năng lực quan trọng đối với sinh viên
+        và người lao động trong thời đại chuyển đổi số.
+    </p>
+</section>
+
+<a class="next-button" href="bai5.html">Xem Bài 5 →</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

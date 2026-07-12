@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài 2 | Tìm kiếm và đánh giá thông tin học thuật</title>
+
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap");
+
+    :root {
+      --navy: #07071d;
+      --panel: #12112c;
+      --panel-2: #1c193a;
+      --pink: #ff9fc6;
+      --lavender: #bca9ff;
+      --cream: #fffaf8;
+      --muted: #c9c4dc;
+      --line: rgba(255,255,255,0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(234, 105, 168, 0.18), transparent 26%),
+        radial-gradient(circle at 15% 80%, rgba(91, 77, 211, 0.18), transparent 30%),
+        var(--navy);
+    }
+
+    header {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 7, 29, 0.86);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-family: "Playfair Display", serif;
+      font-size: 1.5rem;
+      font-style: italic;
+    }
+
+    header a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      width: min(1300px, 94%);
+      margin: 28px auto 70px;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 28px;
+    }
+
+    aside {
+      background: rgba(18, 17, 44, 0.88);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 15px;
+      height: fit-content;
+      position: sticky;
+      top: 105px;
+    }
+
+    .aside-title {
+      color: var(--pink);
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0 0 14px 8px;
+    }
+
+    .lesson-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .lesson-menu a {
+      display: block;
+      padding: 13px 12px;
+      margin-bottom: 7px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.35;
+      transition: 0.25s;
+    }
+
+    .lesson-menu a:hover,
+    .lesson-menu a.active {
+      background: linear-gradient(90deg, #ffb2d2, #f27bb0);
+      color: #261025;
+      font-weight: 700;
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .intro-box,
+    .content-box {
+      background: rgba(18, 17, 44, 0.84);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .intro-box {
+      padding: 28px 30px;
+      margin-bottom: 22px;
+      background:
+        linear-gradient(120deg, rgba(93, 65, 158, 0.44), rgba(231, 105, 158, 0.22)),
+        rgba(18, 17, 44, 0.84);
+    }
+
+    .badge {
+      display: inline-block;
+      color: var(--pink);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1, h2 {
+      font-family: "Playfair Display", serif;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .intro-box p,
+    .content-box p,
+    li {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .content-box {
+      padding: 30px;
+      border-left: 3px solid var(--pink);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      margin: 28px 0 12px;
+      color: var(--cream);
+    }
+
+    h2:first-child {
+      margin-top: 0;
+    }
+
+    ul {
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 9px;
+    }
+
+    .highlight {
+      padding: 16px 18px;
+      margin-top: 22px;
+      border-radius: 14px;
+      background: rgba(255, 159, 198, 0.10);
+      border: 1px solid rgba(255, 159, 198, 0.25);
+      color: #f5ddea;
+    }
+
+    .next-button {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--cream);
+      color: #17102c;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+      }
+
+      .lesson-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .lesson-menu a {
+        margin: 0;
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .lesson-menu {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-box,
+      .content-box {
+        padding: 22px;
+      }
+    }
+    /* ===== BÀI 2: BẢNG ĐÁNH GIÁ NGUỒN ===== */
+.source-section {
+  margin-top: 44px;
+  padding: 36px;
+  border: 1px solid rgba(228, 191, 255, 0.18);
+  border-radius: 26px;
+  background: rgba(42, 25, 78, 0.45);
+}
+
+.section-label {
+  margin: 0 0 10px;
+  color: #ff9bc7;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.source-section h2 {
+  margin: 0;
+  color: #fff8f3;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.source-intro {
+  max-width: 800px;
+  margin: 14px 0 30px;
+  color: #ddd2ed;
+  line-height: 1.75;
+}
+
+.source-card {
+  margin-top: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 214, 239, 0.16);
+  border-radius: 18px;
+  background: rgba(18, 10, 45, 0.58);
+}
+
+.source-card h3 {
+  margin: 0;
+  padding: 18px 20px 8px;
+  color: #ffd0e6;
+  font-size: 1.15rem;
+}
+
+.citation {
+  margin: 0;
+  padding: 0 20px 18px;
+  color: #d9cde9;
+  line-height: 1.6;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.academic-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+}
+
+.academic-table th,
+.academic-table td {
+  padding: 16px;
+  color: #eee6f5;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.65;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.academic-table th {
+  color: #301431;
+  font-size: 0.9rem;
+  background: linear-gradient(90deg, #ffb7d8, #c8a8ff);
+}
+
+.academic-table th:first-child,
+.academic-table td:first-child {
+  width: 190px;
+}
+
+.academic-table td:first-child {
+  color: #ffd0e6;
+  font-weight: 700;
+}
+
+.academic-table th:last-child,
+.academic-table td:last-child {
+  border-right: 0;
+}
+
+.academic-table tr:last-child td {
+  border-bottom: 0;
+}
+
+@media (max-width: 720px) {
+  .source-section {
+    padding: 24px 16px;
+  }
+
+  .source-card h3,
+  .citation {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .academic-table th,
+  .academic-table td {
+    padding: 13px;
+    font-size: 0.9rem;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">Thảo Nhi.</div>
+    <a href="index.html">← Quay về Portfolio</a>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <p class="aside-title">Danh sách bài thực hành</p>
+
+      <ul class="lesson-menu">
+        <li><a href="bai1.html">Bài 1: Quản lý tệp & thư mục</a></li>
+        <li><a class="active" href="bai2.html">Bài 2: Đánh giá học thuật</a></li>
+        <li><a href="bai3.html">Bài 3: Viết prompt hiệu quả</a></li>
+        <li><a href="bai4.html">Bài 4: Hợp tác trực tuyến</a></li>
+        <li><a href="bai5.html">Bài 5: Sáng tạo nội dung với AI</a></li>
+        <li><a href="bai6.html">Bài 6: AI có trách nhiệm</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <section class="intro-box">
+    <span class="badge">Báo cáo thực hành · Chủ đề 2</span>
+  <h1>Tìm kiếm và đánh gia thông tin học thuật</h1>
+
+  <p>Thực hành tìm kiếm, chọn lọc và kiểm chứng nguồn phục vụ cho bài viết học thuật</p>
+
+  <a
+    class="pdf-button"
+    href="./pdf/bai2-tim-kiem-va-danh-gia-thong-tin-hoc-thuat.pdf"
+    target="_blank"
+    rel="noopener"
+  >
+    ↓ Xem báo cáo PDF
+  </a>
+</section>
+
+<section class="source-section">
+  <p class="section-label">MINH CHỨNG THỰC HÀNH</p>
+  <h2>Đánh giá độ tin cậy của nguồn thông tin</h2>
+  <p class="source-intro">
+    Mỗi nguồn được đánh giá dựa trên tác giả, cơ quan xuất bản,
+    phương pháp nghiên cứu, hệ thống trích dẫn và tính cập nhật.
+  </p>
+
+  <!-- NGUỒN 1 -->
+  <article class="source-card">
+    <h3>1. Gerlich, M. (2025)</h3>
+    <p class="citation">
+      <em>AI Tools in Society: Impacts on Cognitive Offloading and the Future of Critical Thinking.</em>
+      Societies, 15(1), 6.
+    </p>
+
+    <div class="table-scroll">
+      <table class="academic-table">
+        <thead>
+          <tr>
+            <th>Tiêu chí</th>
+            <th>Đánh giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tác giả</td>
+            <td>Michael Gerlich làm việc tại SBS Swiss Business School, nghiên cứu về AI, hành vi người dùng và tác động của công nghệ đối với nhận thức. Tác giả có nền tảng học thuật phù hợp nên độ tin cậy khá cao.</td>
+          </tr>
+          <tr>
+            <td>Cơ quan xuất bản</td>
+            <td>Bài báo đăng trên <em>Societies</em> của MDPI, là tạp chí học thuật có bình duyệt. Độ tin cậy cao.</td>
+          </tr>
+          <tr>
+            <td>Phương pháp nghiên cứu</td>
+            <td>Sử dụng phương pháp hỗn hợp: khảo sát và phỏng vấn, kết hợp dữ liệu định lượng với dữ liệu định tính. Mẫu nghiên cứu lớn và phương pháp được trình bày rõ.</td>
+          </tr>
+          <tr>
+            <td>Trích dẫn và cơ sở lý thuyết</td>
+            <td>Có hệ thống trích dẫn rõ ràng, tham khảo nhiều nghiên cứu liên quan đến AI và tư duy phản biện.</td>
+          </tr>
+          <tr>
+            <td>Tính cập nhật</td>
+            <td>Đăng ngày 03/01/2025, phản ánh các thảo luận gần đây về tác động của AI đối với tư duy phản biện.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- NGUỒN 2 -->
+  <article class="source-card">
+    <h3>2. Kosmyna et al. (2025)</h3>
+    <p class="citation">
+      <em>Your Brain on ChatGPT: Accumulation of Cognitive Debt when Using an AI Assistant for Essay Writing Task.</em>
+      arXiv.
+    </p>
+
+    <div class="table-scroll">
+      <table class="academic-table">
+        <thead>
+          <tr>
+            <th>Tiêu chí</th>
+            <th>Đánh giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tác giả</td>
+            <td>Nghiên cứu do 8 tác giả thực hiện, bao gồm Nataliya Kosmyna và Pattie Maes. Các tác giả có liên hệ với MIT và các tổ chức nghiên cứu công nghệ, nên có nền tảng học thuật mạnh.</td>
+          </tr>
+          <tr>
+            <td>Cơ quan xuất bản</td>
+            <td>Đăng trên arXiv, một kho lưu trữ học thuật mở phổ biến trong khoa học và công nghệ. Tuy nhiên, bài chưa qua quy trình bình duyệt chính thức.</td>
+          </tr>
+          <tr>
+            <td>Phương pháp nghiên cứu</td>
+            <td>Sử dụng thực nghiệm kết hợp phân tích thần kinh học; phương pháp đa dạng và khá chi tiết.</td>
+          </tr>
+          <tr>
+            <td>Trích dẫn và cơ sở lý thuyết</td>
+            <td>Hệ thống trích dẫn khá đầy đủ, dựa trên nhiều nguồn học thuật, giúp tăng tính thuyết phục.</td>
+          </tr>
+          <tr>
+            <td>Tính cập nhật</td>
+            <td>Công bố tháng 6/2025, là nguồn rất mới về tác động của AI đến quá trình viết và nhận thức.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- NGUỒN 3 -->
+  <article class="source-card">
+    <h3>3. Albiladi &amp; Alshareef (2019)</h3>
+    <p class="citation">
+      <em>Blended Learning in English Teaching and Learning: A Review of the Current Literature.</em>
+      Journal of Language Teaching and Research, 10, 232–238.
+    </p>
+
+    <div class="table-scroll">
+      <table class="academic-table">
+        <thead>
+          <tr>
+            <th>Tiêu chí</th>
+            <th>Đánh giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tác giả</td>
+            <td>Waheeb Albiladi là nhà nghiên cứu trong lĩnh vực TESOL và giáo dục ngôn ngữ; chuyên môn phù hợp với chủ đề blended learning.</td>
+          </tr>
+          <tr>
+            <td>Cơ quan xuất bản</td>
+            <td>Được công bố trên tạp chí học thuật do Canadian Center of Science and Education phát hành; nguồn có độ tin cậy khá cao.</td>
+          </tr>
+          <tr>
+            <td>Phương pháp nghiên cứu</td>
+            <td>Là bài tổng quan tài liệu, tổng hợp và phân tích các nghiên cứu trước đó về dạy học kết hợp trực tiếp và trực tuyến.</td>
+          </tr>
+          <tr>
+            <td>Trích dẫn và cơ sở lý thuyết</td>
+            <td>Sử dụng tài liệu tham khảo đa dạng về công nghệ trong giảng dạy và các phương pháp giáo dục hiện đại.</td>
+          </tr>
+          <tr>
+            <td>Tính cập nhật</td>
+            <td>Xuất bản năm 2019; vẫn có giá trị nền tảng nhưng nên kết hợp với nghiên cứu mới hơn để phản ánh thay đổi của công nghệ giáo dục.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- NGUỒN 4 -->
+  <article class="source-card">
+    <h3>4. Syakur, Sugirin &amp; Widiarni (2020)</h3>
+    <p class="citation">
+      <em>The Effectiveness of English Learning Media through Google Classroom in Higher Education.</em>
+      BIoLAE Journal, 2(1).
+    </p>
+
+    <div class="table-scroll">
+      <table class="academic-table">
+        <thead>
+          <tr>
+            <th>Tiêu chí</th>
+            <th>Đánh giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tác giả</td>
+            <td>Các tác giả là giảng viên và nhà nghiên cứu về giáo dục tiếng Anh tại các trường đại học ở Indonesia, có chuyên môn phù hợp.</td>
+          </tr>
+          <tr>
+            <td>Cơ quan xuất bản</td>
+            <td>Đăng trên BIoLAE Journal, tạp chí về ngôn ngữ học và giáo dục. Có tính học thuật, nhưng mức độ uy tín ở mức khá so với các tạp chí quốc tế lớn.</td>
+          </tr>
+          <tr>
+            <td>Phương pháp nghiên cứu</td>
+            <td>Sử dụng phương pháp định lượng kết hợp khảo sát và hai chu kỳ học tập để so sánh hiệu quả của Google Classroom.</td>
+          </tr>
+          <tr>
+            <td>Trích dẫn và cơ sở lý thuyết</td>
+            <td>Có danh mục tài liệu tham khảo đầy đủ, gồm bài báo học thuật, sách chuyên ngành và nghiên cứu giáo dục quốc tế.</td>
+          </tr>
+          <tr>
+            <td>Tính cập nhật</td>
+            <td>Xuất bản năm 2020; không phải mới nhất nhưng vẫn còn giá trị tham khảo cho chủ đề công nghệ trong giáo dục.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+
+  <!-- NGUỒN 5 -->
+  <article class="source-card">
+    <h3>5. Guan, Song &amp; Li (2018)</h3>
+    <p class="citation">
+      <em>On the advantages of computer multimedia-aided English teaching.</em>
+      Procedia Computer Science.
+    </p>
+
+    <div class="table-scroll">
+      <table class="academic-table">
+        <thead>
+          <tr>
+            <th>Tiêu chí</th>
+            <th>Đánh giá</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tác giả</td>
+            <td>Nan Guan, Jianxi Song và Dongmei Li đến từ Đại học Beihua (Trung Quốc), có nền tảng trong giảng dạy tiếng Anh và công nghệ giáo dục.</td>
+          </tr>
+          <tr>
+            <td>Cơ quan xuất bản</td>
+            <td>Xuất bản bởi Elsevier trong kỷ yếu hội thảo Procedia Computer Science. Nhà xuất bản uy tín, nhưng quy trình đánh giá của kỷ yếu thường không nghiêm ngặt bằng tạp chí chuyên ngành.</td>
+          </tr>
+          <tr>
+            <td>Phương pháp nghiên cứu</td>
+            <td>Chủ yếu là phân tích lý thuyết và mô tả, dùng lý thuyết học tập cùng ví dụ lớp học; không có khảo sát hoặc thử nghiệm nên tính thực chứng hạn chế.</td>
+          </tr>
+          <tr>
+            <td>Trích dẫn và cơ sở lý thuyết</td>
+            <td>Trích dẫn các nghiên cứu về ứng dụng công nghệ đa phương tiện trong giảng dạy, tạo nền tảng lý thuyết tương đối tốt.</td>
+          </tr>
+          <tr>
+            <td>Tính cập nhật</td>
+            <td>Xuất bản năm 2018. Vẫn có giá trị tham khảo nhưng chưa phản ánh đầy đủ các xu hướng mới như AI và học trực tuyến hiện nay.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </article>
+   <a class="next-button" href="bai3.html">Xem Bài 3 →</a>
+</section>
